@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ethan &amp; Sophia — 12 December 2026</title>
-  <meta name="description" content="The wedding invitation of Ethan &amp; Sophia — a cinematic vintage celebration." />
-  <meta name="theme-color" content="#f3e7cf" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Ethan &amp; Sophia — Wedding Invitation</title>
+  <meta name="description" content="A botanical wedding invitation e-card for Ethan &amp; Sophia." />
+  <meta name="theme-color" content="#f7f1e3" />
 
-  <!-- ── Google Fonts: calligraphy + serif + body ── -->
+  <!-- ── Google Fonts: serif + script + body ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Lora:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -18,343 +18,318 @@
 <body>
 
   <!-- ═══════════════════════════════════════════════════════
-       NAVIGATION · monogram · links · music toggle
+       BOTANICAL BACKGROUND
+       Fixed decorative layer behind the cards.
+       Parallax is applied subtly in script.js.
        ═══════════════════════════════════════════════════════ -->
-  <nav class="nav" aria-label="Primary">
-    <a href="#hero" class="nav__monogram" aria-label="Home">E &amp; S</a>
+  <div class="bg" id="bg" aria-hidden="true">
+    <div class="bg__paper"></div>
 
-    <ul class="nav__links">
-      <li><a href="#story">Our Story</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#gallery">Gallery</a></li>
-      <li><a href="#countdown">Countdown</a></li>
-      <li><a href="#rsvp">RSVP</a></li>
-    </ul>
+    <!-- Top-left leafy branch -->
+    <svg class="bg__leaf bg__leaf--tl" viewBox="0 0 220 260" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#789e6d" stroke-linecap="round">
+        <path d="M10 10 C 60 80, 100 120, 170 220" stroke-width="1.8" opacity=".7"/>
+        <!-- leaves clustered along the stem -->
+        <g fill="#8fae7a" opacity=".82">
+          <ellipse cx="38" cy="44" rx="18" ry="7" transform="rotate(-40 38 44)"/>
+          <ellipse cx="30" cy="58" rx="15" ry="6" transform="rotate(35 30 58)"/>
+          <ellipse cx="64" cy="82" rx="20" ry="8" transform="rotate(-30 64 82)"/>
+          <ellipse cx="58" cy="102" rx="17" ry="7" transform="rotate(42 58 102)"/>
+          <ellipse cx="92" cy="128" rx="22" ry="8" transform="rotate(-28 92 128)"/>
+          <ellipse cx="84" cy="150" rx="18" ry="7" transform="rotate(40 84 150)"/>
+          <ellipse cx="118" cy="176" rx="22" ry="8" transform="rotate(-32 118 176)"/>
+          <ellipse cx="112" cy="198" rx="17" ry="6" transform="rotate(38 112 198)"/>
+          <ellipse cx="146" cy="214" rx="22" ry="8" transform="rotate(-30 146 214)"/>
+        </g>
+        <!-- deeper-green veins -->
+        <g stroke="#567a50" stroke-width="1" opacity=".5">
+          <path d="M20 36 l34 14"/>
+          <path d="M48 74 l28 14"/>
+          <path d="M76 120 l32 14"/>
+          <path d="M104 168 l32 14"/>
+        </g>
+      </g>
+    </svg>
 
-    <button class="music-toggle" id="musicToggle" aria-label="Play background music" aria-pressed="false" type="button">
-      <span class="music-toggle__bars" aria-hidden="true">
-        <span></span><span></span><span></span><span></span>
-      </span>
-      <span class="music-toggle__label">Music</span>
-    </button>
-  </nav>
+    <!-- Top-right mirrored branch -->
+    <svg class="bg__leaf bg__leaf--tr" viewBox="0 0 220 260" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#789e6d" stroke-linecap="round">
+        <path d="M210 10 C 160 80, 120 120, 50 220" stroke-width="1.8" opacity=".7"/>
+        <g fill="#8fae7a" opacity=".82">
+          <ellipse cx="182" cy="44" rx="18" ry="7" transform="rotate(40 182 44)"/>
+          <ellipse cx="190" cy="58" rx="15" ry="6" transform="rotate(-35 190 58)"/>
+          <ellipse cx="156" cy="82" rx="20" ry="8" transform="rotate(30 156 82)"/>
+          <ellipse cx="162" cy="102" rx="17" ry="7" transform="rotate(-42 162 102)"/>
+          <ellipse cx="128" cy="128" rx="22" ry="8" transform="rotate(28 128 128)"/>
+          <ellipse cx="136" cy="150" rx="18" ry="7" transform="rotate(-40 136 150)"/>
+          <ellipse cx="102" cy="176" rx="22" ry="8" transform="rotate(32 102 176)"/>
+          <ellipse cx="108" cy="198" rx="17" ry="6" transform="rotate(-38 108 198)"/>
+          <ellipse cx="74" cy="214" rx="22" ry="8" transform="rotate(30 74 214)"/>
+        </g>
+      </g>
+    </svg>
+
+    <!-- Side mid-left small sprig -->
+    <svg class="bg__sprig bg__sprig--l" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#789e6d" stroke-linecap="round">
+        <path d="M20 20 Q 40 100 80 190" stroke-width="1.4" opacity=".55"/>
+        <g fill="#95b883" opacity=".7">
+          <ellipse cx="34" cy="52" rx="14" ry="5" transform="rotate(-30 34 52)"/>
+          <ellipse cx="46" cy="86" rx="14" ry="5" transform="rotate(40 46 86)"/>
+          <ellipse cx="58" cy="120" rx="14" ry="5" transform="rotate(-32 58 120)"/>
+          <ellipse cx="70" cy="154" rx="14" ry="5" transform="rotate(38 70 154)"/>
+        </g>
+      </g>
+    </svg>
+
+    <!-- Side mid-right small sprig -->
+    <svg class="bg__sprig bg__sprig--r" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#789e6d" stroke-linecap="round">
+        <path d="M100 20 Q 80 100 40 190" stroke-width="1.4" opacity=".55"/>
+        <g fill="#95b883" opacity=".7">
+          <ellipse cx="86" cy="52" rx="14" ry="5" transform="rotate(30 86 52)"/>
+          <ellipse cx="74" cy="86" rx="14" ry="5" transform="rotate(-40 74 86)"/>
+          <ellipse cx="62" cy="120" rx="14" ry="5" transform="rotate(32 62 120)"/>
+          <ellipse cx="50" cy="154" rx="14" ry="5" transform="rotate(-38 50 154)"/>
+        </g>
+      </g>
+    </svg>
+
+    <!-- Bottom-left berry floral -->
+    <svg class="bg__berry bg__berry--bl" viewBox="0 0 240 220" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none">
+        <path d="M10 210 C 50 140, 90 100, 180 30" stroke="#789e6d" stroke-width="1.6" stroke-linecap="round" opacity=".65"/>
+        <g fill="#8fae7a" opacity=".8">
+          <ellipse cx="44" cy="168" rx="16" ry="6" transform="rotate(-30 44 168)"/>
+          <ellipse cx="78" cy="130" rx="17" ry="6" transform="rotate(-42 78 130)"/>
+          <ellipse cx="112" cy="94" rx="18" ry="7" transform="rotate(-48 112 94)"/>
+          <ellipse cx="148" cy="62" rx="16" ry="6" transform="rotate(-54 148 62)"/>
+        </g>
+        <!-- small pink-red berry clusters -->
+        <g>
+          <circle cx="34" cy="188" r="5" fill="#c67a7a"/>
+          <circle cx="44" cy="186" r="4.5" fill="#b66666"/>
+          <circle cx="40" cy="196" r="4" fill="#c67a7a"/>
+          <circle cx="70" cy="150" r="5" fill="#b66666"/>
+          <circle cx="78" cy="146" r="4" fill="#c67a7a"/>
+          <circle cx="100" cy="108" r="4.5" fill="#c67a7a"/>
+          <circle cx="108" cy="102" r="4" fill="#b66666"/>
+          <circle cx="136" cy="74" r="4.5" fill="#c67a7a"/>
+          <circle cx="144" cy="70" r="4" fill="#b66666"/>
+          <circle cx="170" cy="42" r="4.5" fill="#c67a7a"/>
+          <circle cx="178" cy="36" r="4" fill="#b66666"/>
+        </g>
+      </g>
+    </svg>
+
+    <!-- Bottom-right berry floral (mirrored) -->
+    <svg class="bg__berry bg__berry--br" viewBox="0 0 240 220" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none">
+        <path d="M230 210 C 190 140, 150 100, 60 30" stroke="#789e6d" stroke-width="1.6" stroke-linecap="round" opacity=".65"/>
+        <g fill="#8fae7a" opacity=".8">
+          <ellipse cx="196" cy="168" rx="16" ry="6" transform="rotate(30 196 168)"/>
+          <ellipse cx="162" cy="130" rx="17" ry="6" transform="rotate(42 162 130)"/>
+          <ellipse cx="128" cy="94" rx="18" ry="7" transform="rotate(48 128 94)"/>
+          <ellipse cx="92" cy="62" rx="16" ry="6" transform="rotate(54 92 62)"/>
+        </g>
+        <g>
+          <circle cx="206" cy="188" r="5" fill="#c67a7a"/>
+          <circle cx="196" cy="186" r="4.5" fill="#b66666"/>
+          <circle cx="200" cy="196" r="4" fill="#c67a7a"/>
+          <circle cx="170" cy="150" r="5" fill="#b66666"/>
+          <circle cx="162" cy="146" r="4" fill="#c67a7a"/>
+          <circle cx="140" cy="108" r="4.5" fill="#c67a7a"/>
+          <circle cx="132" cy="102" r="4" fill="#b66666"/>
+          <circle cx="104" cy="74" r="4.5" fill="#c67a7a"/>
+          <circle cx="96" cy="70" r="4" fill="#b66666"/>
+          <circle cx="70" cy="42" r="4.5" fill="#c67a7a"/>
+          <circle cx="62" cy="36" r="4" fill="#b66666"/>
+        </g>
+      </g>
+    </svg>
+  </div>
 
   <!-- ═══════════════════════════════════════════════════════
-       1 · HERO · full-screen cinematic video + title
+       THE STACK
+       All cards live inside this centered column.
+       Mobile-first (~390px) — on desktop the stack simply
+       stays centered at its mobile width.
        ═══════════════════════════════════════════════════════ -->
-  <header id="hero" class="hero">
+  <main class="stack">
 
-    <!-- Background video (falls back to poster image if video missing) -->
-    <video
-      class="hero__video"
-      id="heroVideo"
-      autoplay muted loop playsinline
-      preload="metadata"
-      poster="assets/couple.jpg"
-      aria-hidden="true">
-      <source src="assets/wedding-film.mp4" type="video/mp4" />
-    </video>
+    <!-- ───────── 1 · COVER CARD ───────── -->
+    <section class="card card--cover reveal">
+      <div class="card__inner">
+        <div class="card__tag">— EST. 2026 —</div>
 
-    <!-- Warm dark-beige overlay so text stays readable -->
-    <div class="hero__overlay" aria-hidden="true"></div>
+        <p class="eyebrow">Invitation to</p>
+        <h1 class="cover__title">Wedding</h1>
 
-    <!-- Floating particles canvas -->
-    <canvas class="hero__particles" id="heroParticles" aria-hidden="true"></canvas>
+        <div class="divider"><span></span><i></i><span></span></div>
 
-    <!-- Ornamental corners -->
-    <div class="hero__corner hero__corner--tl" aria-hidden="true"></div>
-    <div class="hero__corner hero__corner--tr" aria-hidden="true"></div>
-    <div class="hero__corner hero__corner--bl" aria-hidden="true"></div>
-    <div class="hero__corner hero__corner--br" aria-hidden="true"></div>
-
-    <!-- Centered content -->
-    <div class="hero__inner reveal">
-      <p class="hero__eyebrow">— Together with their families —</p>
-
-      <h1 class="hero__names">
-        <span class="hero__name">Ethan</span>
-        <span class="hero__amp">&amp;</span>
-        <span class="hero__name">Sophia</span>
-      </h1>
-
-      <p class="hero__date">
-        <span>Saturday</span>
-        <span class="hero__date-big">12 · 12 · 2026</span>
-        <span>The Grand Palace Hall</span>
-      </p>
-
-      <p class="hero__tagline"><em>“A love story written in candlelight and quiet promises.”</em></p>
-
-      <a class="btn-gold hero__cta" href="#rsvp">
-        <span>RSVP</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 H20 M14 6 L20 12 L14 18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
-
-    <!-- Gentle scroll indicator -->
-    <a class="scroll-indicator" href="#story" aria-label="Scroll to our story">
-      <span class="scroll-indicator__label">Scroll</span>
-      <span class="scroll-indicator__line" aria-hidden="true"></span>
-    </a>
-  </header>
-
-  <!-- ═══════════════════════════════════════════════════════
-       2 · OUR STORY · two-column with photo + text
-       ═══════════════════════════════════════════════════════ -->
-  <section id="story" class="story">
-    <div class="section-heading reveal">
-      <svg class="flourish" viewBox="0 0 200 30" aria-hidden="true"><path d="M10 15 Q60 0 100 15 T190 15" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="100" cy="15" r="2.5" fill="currentColor"/></svg>
-      <p class="eyebrow">Chapter One</p>
-      <h2>Our Story</h2>
-      <svg class="flourish flourish--flip" viewBox="0 0 200 30" aria-hidden="true"><path d="M10 15 Q60 30 100 15 T190 15" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="100" cy="15" r="2.5" fill="currentColor"/></svg>
-    </div>
-
-    <div class="story__grid">
-      <figure class="story__photo reveal" aria-label="Photograph of Ethan and Sophia">
-        <div class="story__photo-frame" aria-hidden="true"></div>
-      </figure>
-
-      <div class="story__text reveal">
-        <p class="story__lede">How two quiet souls found the same song.</p>
-
-        <p>They met one late autumn in a little bookshop in Paris — he was reaching for a Neruda, she was already holding it. A shared smile, a shared coffee, and a conversation that slipped past the closing hour.</p>
-
-        <div class="story__ornament" aria-hidden="true">
-          <svg viewBox="0 0 160 22">
-            <path d="M0 11 H60 M100 11 H160" fill="none" stroke="currentColor" stroke-width="1"/>
-            <path d="M70 11 l5 -6 l5 6 l-5 6 z M80 11 l5 -6 l5 6 l-5 6 z" fill="currentColor" opacity=".85"/>
-          </svg>
-        </div>
-
-        <p>Seasons turned. Letters were written. Cities were crossed. And under a canopy of winter stars, between two small silver rings, a promise quietly became forever.</p>
-
-        <p class="story__signature">— <em>Ethan &amp; Sophia</em> —</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════
-       3 · EVENT DETAILS · four framed cards
-       ═══════════════════════════════════════════════════════ -->
-  <section id="details" class="details">
-    <div class="section-heading reveal">
-      <svg class="flourish" viewBox="0 0 200 30" aria-hidden="true"><path d="M10 15 Q60 0 100 15 T190 15" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="100" cy="15" r="2.5" fill="currentColor"/></svg>
-      <p class="eyebrow">Chapter Two</p>
-      <h2>The Celebration</h2>
-      <svg class="flourish flourish--flip" viewBox="0 0 200 30" aria-hidden="true"><path d="M10 15 Q60 30 100 15 T190 15" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="100" cy="15" r="2.5" fill="currentColor"/></svg>
-    </div>
-
-    <div class="details__grid">
-      <!-- Ceremony -->
-      <article class="detail-card reveal">
-        <div class="detail-card__frame" aria-hidden="true"></div>
-        <svg class="detail-card__icon" viewBox="0 0 60 60" aria-hidden="true">
-          <path d="M30 8 Q20 22 20 32 a10 10 0 0 0 20 0 Q40 22 30 8z" fill="none" stroke="currentColor" stroke-width="1.2"/>
-          <path d="M30 42 V54 M22 54 H38" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-        </svg>
-        <h3>Ceremony</h3>
-        <p class="detail-card__label">Saturday, 12 December 2026</p>
-        <p class="detail-card__time">3:00 in the afternoon</p>
-        <p class="detail-card__venue">The Grand Palace Hall<br/>Chapel Wing</p>
-      </article>
-
-      <!-- Reception -->
-      <article class="detail-card reveal">
-        <div class="detail-card__frame" aria-hidden="true"></div>
-        <svg class="detail-card__icon" viewBox="0 0 60 60" aria-hidden="true">
-          <path d="M14 46 V26 a6 6 0 0 1 12 0 V46 M34 46 V26 a6 6 0 0 1 12 0 V46" fill="none" stroke="currentColor" stroke-width="1.2"/>
-          <path d="M20 26 V16 M40 26 V16" fill="none" stroke="currentColor" stroke-width="1.2"/>
-          <path d="M10 46 H50" fill="none" stroke="currentColor" stroke-width="1.2"/>
-        </svg>
-        <h3>Reception</h3>
-        <p class="detail-card__label">Saturday, 12 December 2026</p>
-        <p class="detail-card__time">7:00 in the evening</p>
-        <p class="detail-card__venue">The Grand Palace Hall<br/>Crystal Ballroom</p>
-      </article>
-
-      <!-- Venue -->
-      <article class="detail-card reveal">
-        <div class="detail-card__frame" aria-hidden="true"></div>
-        <svg class="detail-card__icon" viewBox="0 0 60 60" aria-hidden="true">
-          <path d="M30 10 L48 26 V50 H12 V26 Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-          <path d="M24 50 V36 H36 V50" fill="none" stroke="currentColor" stroke-width="1.2"/>
-          <circle cx="30" cy="18" r="2" fill="currentColor"/>
-        </svg>
-        <h3>Venue</h3>
-        <p class="detail-card__label">The Grand Palace Hall</p>
-        <p class="detail-card__time">Royal Avenue</p>
-        <p class="detail-card__venue">Ivory Court · Garden Wing<br/>Dress code: Formal Evening</p>
-        <a class="detail-card__link" href="https://maps.google.com/?q=The+Grand+Palace+Hall" target="_blank" rel="noopener">View Map →</a>
-      </article>
-
-      <!-- Time -->
-      <article class="detail-card reveal">
-        <div class="detail-card__frame" aria-hidden="true"></div>
-        <svg class="detail-card__icon" viewBox="0 0 60 60" aria-hidden="true">
-          <circle cx="30" cy="30" r="20" fill="none" stroke="currentColor" stroke-width="1.2"/>
-          <path d="M30 14 V30 L40 36" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-          <circle cx="30" cy="30" r="1.5" fill="currentColor"/>
-        </svg>
-        <h3>Schedule</h3>
-        <p class="detail-card__label">Arrival · 2:30 pm</p>
-        <p class="detail-card__time">A Day in Full</p>
-        <p class="detail-card__venue">Ceremony · 3:00<br/>Cocktails · 5:30<br/>Dinner &amp; Dance · 7:00</p>
-      </article>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════
-       4 · GALLERY · warm-toned image grid
-       ═══════════════════════════════════════════════════════ -->
-  <section id="gallery" class="gallery">
-    <div class="section-heading reveal">
-      <svg class="flourish" viewBox="0 0 200 30" aria-hidden="true"><path d="M10 15 Q60 0 100 15 T190 15" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="100" cy="15" r="2.5" fill="currentColor"/></svg>
-      <p class="eyebrow">Moments Captured</p>
-      <h2>Gallery</h2>
-      <svg class="flourish flourish--flip" viewBox="0 0 200 30" aria-hidden="true"><path d="M10 15 Q60 30 100 15 T190 15" fill="none" stroke="currentColor" stroke-width="1.1"/><circle cx="100" cy="15" r="2.5" fill="currentColor"/></svg>
-    </div>
-
-    <div class="gallery__grid">
-      <!-- Each figure references an image in /assets. Replace with real files. -->
-      <figure class="gallery__item reveal gallery__item--1"><div class="gallery__photo"></div></figure>
-      <figure class="gallery__item reveal gallery__item--2"><div class="gallery__photo"></div></figure>
-      <figure class="gallery__item reveal gallery__item--3"><div class="gallery__photo"></div></figure>
-      <figure class="gallery__item reveal gallery__item--4"><div class="gallery__photo"></div></figure>
-      <figure class="gallery__item reveal gallery__item--5"><div class="gallery__photo"></div></figure>
-      <figure class="gallery__item reveal gallery__item--6"><div class="gallery__photo"></div></figure>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════
-       5 · COUNTDOWN · days / hours / minutes / seconds
-       ═══════════════════════════════════════════════════════ -->
-  <section id="countdown" class="countdown">
-    <div class="countdown__inner reveal">
-      <p class="eyebrow">Until we say "I do"</p>
-      <h2 class="countdown__title">The Countdown</h2>
-
-      <!-- The target date is set in script.js — 12 December 2026, 15:00 local -->
-      <div class="countdown__grid" id="countdownGrid" aria-live="polite">
-        <div class="countdown__unit"><span class="countdown__num" id="cdDays">00</span><span class="countdown__lbl">Days</span></div>
-        <div class="countdown__sep" aria-hidden="true">·</div>
-        <div class="countdown__unit"><span class="countdown__num" id="cdHours">00</span><span class="countdown__lbl">Hours</span></div>
-        <div class="countdown__sep" aria-hidden="true">·</div>
-        <div class="countdown__unit"><span class="countdown__num" id="cdMinutes">00</span><span class="countdown__lbl">Minutes</span></div>
-        <div class="countdown__sep" aria-hidden="true">·</div>
-        <div class="countdown__unit"><span class="countdown__num" id="cdSeconds">00</span><span class="countdown__lbl">Seconds</span></div>
-      </div>
-
-      <p class="countdown__caption">Every hour brings us closer to the beginning of forever.</p>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════
-       6 · RSVP · elegant form
-       ═══════════════════════════════════════════════════════ -->
-  <section id="rsvp" class="rsvp">
-    <div class="rsvp__frame reveal">
-      <div class="rsvp__corner rsvp__corner--tl" aria-hidden="true"></div>
-      <div class="rsvp__corner rsvp__corner--tr" aria-hidden="true"></div>
-      <div class="rsvp__corner rsvp__corner--bl" aria-hidden="true"></div>
-      <div class="rsvp__corner rsvp__corner--br" aria-hidden="true"></div>
-
-      <div class="section-heading">
-        <p class="eyebrow">Répondez s'il vous plaît</p>
-        <h2>Kindly Respond</h2>
-        <p class="rsvp__lede">Your presence would grace our celebration. Please reply by <em>1 November 2026</em>.</p>
-      </div>
-
-      <form class="rsvp__form" id="rsvpForm" novalidate>
-        <div class="field">
-          <label for="fullName">Full Name</label>
-          <input id="fullName" name="fullName" type="text" autocomplete="name" required />
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" autocomplete="email" required />
-        </div>
-
-        <!-- Q1 · Attendance -->
-        <fieldset class="field field--radio">
-          <legend><span class="q-num">I.</span> Will you be attending our wedding?</legend>
-          <label class="radio"><input type="radio" name="attending" value="yes" required /><span>Yes, with pleasure</span></label>
-          <label class="radio"><input type="radio" name="attending" value="no" /><span>Regretfully decline</span></label>
-        </fieldset>
-
-        <!-- Q2 · Guest Affiliation -->
-        <fieldset class="field field--radio">
-          <legend><span class="q-num">II.</span> You are attending as</legend>
-          <label class="radio"><input type="radio" name="affiliation" value="bride" required /><span>Bride's Guest</span></label>
-          <label class="radio"><input type="radio" name="affiliation" value="groom" /><span>Groom's Guest</span></label>
-          <label class="radio"><input type="radio" name="affiliation" value="both" /><span>Both</span></label>
-        </fieldset>
-
-        <!-- Q3 · Main Course -->
-        <fieldset class="field field--radio">
-          <legend>
-            <span class="q-num">III.</span> Kindly select your preferred main course
-            <span class="legend-note">— to be confirmed after our food tasting —</span>
-          </legend>
-          <label class="radio"><input type="radio" name="mainCourse" value="fish" /><span>Fish</span></label>
-          <label class="radio"><input type="radio" name="mainCourse" value="beef" /><span>Beef</span></label>
-          <label class="radio"><input type="radio" name="mainCourse" value="chicken" /><span>Chicken</span></label>
-        </fieldset>
-
-        <!-- Q4 · Dietary -->
-        <fieldset class="field field--radio">
-          <legend><span class="q-num">IV.</span> Dietary requirements or allergies</legend>
-          <label class="radio"><input type="radio" name="dietary" value="none" required /><span>No dietary restrictions</span></label>
-          <label class="radio"><input type="radio" name="dietary" value="yes" /><span>Yes — please specify below</span></label>
-        </fieldset>
-
-        <div class="field field--conditional" id="dietaryDetailsField" hidden>
-          <label for="dietaryDetails">Please specify</label>
-          <input id="dietaryDetails" name="dietaryDetails" type="text" placeholder="e.g. vegetarian, nut allergy, gluten-free…" />
-        </div>
-
-        <div class="field">
-          <label for="message">A Message for the Couple <span class="optional">(optional)</span></label>
-          <textarea id="message" name="message" rows="4" placeholder="Well wishes, poetry, or a favourite memory…"></textarea>
-        </div>
-
-        <button type="submit" class="btn-gold rsvp__submit">
-          <span>Send With Love</span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 H20 M14 6 L20 12 L14 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-
-        <p class="rsvp__success" id="rsvpSuccess" hidden>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12 L10 17 L19 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Thank you — your reply has been received with joy.
+        <p class="cover__couple">
+          Mr. <span class="cover__name">Ethan</span>
+          <span class="cover__amp">&amp;</span>
+          Mrs. <span class="cover__name">Sophia</span>
         </p>
-      </form>
-    </div>
-  </section>
 
-  <!-- ═══════════════════════════════════════════════════════
-       FOOTER · monogram + thank-you + ornamental border
-       ═══════════════════════════════════════════════════════ -->
-  <footer class="footer">
-    <div class="footer__ornament" aria-hidden="true">
-      <svg viewBox="0 0 300 60">
-        <g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
-          <path d="M0 30 H110 M190 30 H300" opacity=".6"/>
-          <path d="M150 10 Q130 30 110 30 Q130 30 150 50 Q170 30 190 30 Q170 30 150 10z"/>
-          <circle cx="150" cy="30" r="2.5" fill="currentColor"/>
-          <circle cx="110" cy="30" r="1.8" fill="currentColor" opacity=".7"/>
-          <circle cx="190" cy="30" r="1.8" fill="currentColor" opacity=".7"/>
+        <p class="cover__subtitle"><em>“Two hearts, one story, written in forever.”</em></p>
+
+        <div class="card__tag card__tag--bottom">12 · 12 · 2026</div>
+      </div>
+    </section>
+
+    <!-- ───────── 2 · SAVE THE DATE CARD ───────── -->
+    <section class="card card--save reveal">
+      <div class="card__inner">
+        <p class="eyebrow">Wedding Invitation</p>
+        <h2 class="save__title">Please Save<br/>the Date</h2>
+
+        <figure class="save__photo">
+          <div class="save__photo-img" role="img" aria-label="Photograph of the couple"></div>
+        </figure>
+
+        <div class="divider divider--short"><span></span><i></i><span></span></div>
+
+        <p class="save__body">
+          Together with their families,<br/>
+          <strong>Ethan Harrison</strong> and <strong>Sophia Laurent</strong><br/>
+          request the honour of your presence<br/>
+          at the celebration of their marriage.
+        </p>
+
+        <p class="save__meta">
+          <span>Saturday, the Twelfth of December</span><br/>
+          <span>Two Thousand and Twenty-Six</span><br/>
+          <span>at Three in the Afternoon</span>
+        </p>
+
+        <p class="save__venue">The Grand Palace Hall</p>
+      </div>
+    </section>
+
+    <!-- ───────── 3 · GROOM CARD ───────── -->
+    <section class="card card--groom reveal">
+      <div class="card__inner">
+        <figure class="oval-photo">
+          <div class="oval-photo__img oval-photo__img--groom" role="img" aria-label="Portrait of the groom"></div>
+        </figure>
+
+        <h2 class="script-title">The Groom</h2>
+        <p class="eyebrow">Love you forever</p>
+
+        <div class="divider divider--short"><span></span><i></i><span></span></div>
+
+        <p class="person__name">Ethan Harrison</p>
+        <p class="person__detail">
+          The eldest son of<br/>
+          <em>Mr. &amp; Mrs. Harrison</em>
+        </p>
+
+        <p class="person__quote">
+          “In her quiet laughter I found the song<br/>
+          I had been humming all my life.”
+        </p>
+      </div>
+    </section>
+
+    <!-- ───────── 4 · COUPLE PHOTO CARD ───────── -->
+    <section class="card card--couple reveal">
+      <div class="card__inner card__inner--tight">
+        <figure class="tall-photo">
+          <div class="tall-photo__img" role="img" aria-label="Photograph of the couple together"></div>
+          <figcaption class="tall-photo__cap">
+            <span class="tall-photo__script">Sweet Love</span>
+            <span class="tall-photo__serif">— Wedding Invitation —</span>
+          </figcaption>
+        </figure>
+
+        <p class="couple__caption">
+          <em>Two souls, one heartbeat — forever intertwined.</em>
+        </p>
+      </div>
+    </section>
+
+    <!-- ───────── 5 · TRANSITION ───────── -->
+    <section class="transition reveal" aria-hidden="true">
+      <svg viewBox="0 0 120 40" class="transition__divider">
+        <g fill="none" stroke="#a58e6e" stroke-linecap="round" stroke-width="1">
+          <path d="M10 20 H45 M75 20 H110"/>
+          <path d="M55 14 Q60 20 55 26 M65 14 Q60 20 65 26" opacity=".7"/>
+          <circle cx="60" cy="20" r="2" fill="#a58e6e"/>
         </g>
       </svg>
-    </div>
+    </section>
 
-    <div class="footer__monogram reveal">E &amp; S</div>
-    <p class="footer__thanks reveal">With all our love — thank you for being part of our forever.</p>
-    <p class="footer__meta">Ethan &amp; Sophia · 12 December 2026 · The Grand Palace Hall</p>
-  </footer>
+    <!-- ───────── 6 · COUNTDOWN + RSVP CARD ───────── -->
+    <section class="card card--rsvp reveal">
+      <div class="card__inner">
+        <p class="eyebrow">Wedding Invitation</p>
+        <h2 class="save__title">Countdown</h2>
 
-  <!-- Optional background music. Replace assets/ambient.mp3 with your track. -->
-  <audio id="bgMusic" loop preload="none">
-    <source src="assets/ambient.mp3" type="audio/mpeg" />
-  </audio>
+        <div class="countdown" id="countdownGrid" aria-live="polite">
+          <div class="countdown__unit">
+            <span class="countdown__num" id="cdDays">00</span>
+            <span class="countdown__lbl">Days</span>
+          </div>
+          <div class="countdown__unit">
+            <span class="countdown__num" id="cdHours">00</span>
+            <span class="countdown__lbl">Hours</span>
+          </div>
+          <div class="countdown__unit">
+            <span class="countdown__num" id="cdMinutes">00</span>
+            <span class="countdown__lbl">Minutes</span>
+          </div>
+          <div class="countdown__unit">
+            <span class="countdown__num" id="cdSeconds">00</span>
+            <span class="countdown__lbl">Seconds</span>
+          </div>
+        </div>
+
+        <div class="divider divider--short"><span></span><i></i><span></span></div>
+
+        <form class="rsvp" id="rsvpForm" novalidate>
+          <div class="rsvp__field">
+            <label for="rsvpName">Name</label>
+            <input id="rsvpName" name="name" type="text" autocomplete="name" required />
+          </div>
+
+          <div class="rsvp__field">
+            <label for="rsvpSide">Groom / Bride</label>
+            <select id="rsvpSide" name="side" required>
+              <option value="" disabled selected>Please select</option>
+              <option value="groom">Groom's Guest</option>
+              <option value="bride">Bride's Guest</option>
+              <option value="both">Both</option>
+            </select>
+          </div>
+
+          <div class="rsvp__field">
+            <label for="rsvpMain">Main Course</label>
+            <select id="rsvpMain" name="main">
+              <option value="" disabled selected>Please select</option>
+              <option value="fish">Fish</option>
+              <option value="beef">Beef</option>
+              <option value="chicken">Chicken</option>
+            </select>
+          </div>
+
+          <div class="rsvp__field">
+            <label for="rsvpDiet">Dietary Restrictions</label>
+            <input id="rsvpDiet" name="diet" type="text" placeholder="None, vegetarian, allergies…" />
+          </div>
+
+          <button type="submit" class="btn-dark">Submit</button>
+          <p class="rsvp__ok" id="rsvpSuccess" hidden>✓ Thank you — your reply has been received.</p>
+        </form>
+
+        <p class="footer-line">— Welcome to our Wedding —</p>
+      </div>
+    </section>
+
+    <!-- Final spacing -->
+    <div class="stack__end" aria-hidden="true"></div>
+  </main>
 
   <script src="script.js"></script>
 </body>
