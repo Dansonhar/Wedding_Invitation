@@ -131,16 +131,15 @@
 (function () {
   'use strict';
 
-  const VIDEO_ID      = 'svjMiqVeiG8';
-  const LIST_ID       = 'RDsvjMiqVeiG8';
-  let   player        = null;
-  let   playerReady   = false;
-  let   userActed     = false;
+  const VIDEO_ID  = 'SuPCTBmISzQ';
+  let   player    = null;
+  let   playerReady = false;
+  let   userActed   = false;
 
   function tryUnmute() {
-    if (playerReady && userActed && player) {
+    if (player && playerReady) {
       player.unMute();
-      player.setVolume(60);
+      player.setVolume(70);
     }
   }
 
@@ -149,11 +148,10 @@
     player = new YT.Player('ytPlayer', {
       videoId: VIDEO_ID,
       playerVars: {
-        listType      : 'playlist',
-        list          : LIST_ID,
         autoplay      : 1,
-        mute          : 1,
+        mute          : 1,        // start muted — required for autoplay
         loop          : 1,
+        playlist      : VIDEO_ID, // required for loop to work
         controls      : 0,
         disablekb     : 1,
         iv_load_policy: 3,
@@ -165,7 +163,10 @@
         onReady: function (e) {
           playerReady = true;
           e.target.playVideo();
-          tryUnmute();                // unmute immediately if user already acted
+          // Try to unmute immediately — works on browsers that allow
+          // autoplay with sound (returning visitors / high engagement).
+          // Falls back to first-interaction unmute if blocked.
+          tryUnmute();
         },
         onStateChange: function (e) {
           if (e.data === YT.PlayerState.ENDED) e.target.playVideo();
@@ -174,7 +175,7 @@
     });
   };
 
-  // First interaction → set flag and try to unmute
+  // Unmute on very first interaction as fallback for strict browsers
   function onFirstInteraction() {
     if (userActed) return;
     userActed = true;
