@@ -158,127 +158,106 @@
     renderer.setSize(W, H);
     renderer.setClearColor(0x000000, 0);
 
-    const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 50);
-    camera.position.z = 8;
+    const scene = new THREE.Scene();
 
-    // World-space bounds visible at z = 0
-    const vFOV = (60 * Math.PI) / 180;
-    const visH = 2 * Math.tan(vFOV / 2) * camera.position.z; // ~9.24 units
-    const visW = visH * (W / H);
+    // Orthographic camera: 1 world unit = 1 CSS pixel — exact, predictable sizing
+    const cam = new THREE.OrthographicCamera(-W / 2, W / 2, H / 2, -H / 2, 0.1, 10);
+    cam.position.z = 5;
 
-    // ── Geometries ──────────────────────────────────────────
-    // Leaf: pointed oval
-    const leafShape = new THREE.Shape();
-    leafShape.moveTo(0, 0);
-    leafShape.bezierCurveTo( 0.44,  0.08,  0.44, 0.92, 0, 1);
-    leafShape.bezierCurveTo(-0.44,  0.92, -0.44, 0.08, 0, 0);
-    const leafGeo = new THREE.ShapeGeometry(leafShape, 10);
+    // ── Geometries (sizes in pixels) ──────────────────────────
+    // Leaf: slim diamond  ~10 × 20 px
+    // Petal: wide diamond ~16 × 10 px
+    // Berry: circle       ~7 px radius
+    function makeDiamond(w, h) {
+      const hw = w / 2, hh = h / 2;
+      const pos = new Float32Array([
+         0,  hh, 0,   // top
+        hw,   0, 0,   // right
+         0, -hh, 0,   // bottom
+       -hw,   0, 0,   // left
+      ]);
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      geo.setIndex([0, 1, 3,  1, 2, 3]);
+      return geo;
+    }
 
-    // Petal: small ellipse
-    const petalShape = new THREE.Shape();
-    petalShape.absellipse(0, 0, 0.28, 0.16, 0, Math.PI * 2);
-    const petalGeo = new THREE.ShapeGeometry(petalShape, 10);
-
-    // Berry: tiny sphere
-    const berryGeo = new THREE.SphereGeometry(0.09, 7, 7);
+    const leafGeo  = makeDiamond(10, 20);
+    const petalGeo = makeDiamond(16, 10);
+    const berryGeo = new THREE.CircleGeometry(7, 10);
 
     // ── Materials ────────────────────────────────────────────
-    const mkMat = (hex, opacity, double) => new THREE.MeshBasicMaterial({
-      color: hex, transparent: true, opacity,
-      side: double ? THREE.DoubleSide : THREE.FrontSide,
+    const mkMat = (hex, opacity) => new THREE.MeshBasicMaterial({
+      color: hex, transparent: true, opacity, side: THREE.DoubleSide,
     });
-
-    const leafMats  = [mkMat(0x789e6d, .86, true), mkMat(0x8fae7a, .78, true), mkMat(0x567a50, .80, true)];
-    const petalMat  = mkMat(0xf5ddd6, .72, true);
-    const berryMat  = mkMat(0xc67a7a, .92, false);
+    const leafMats = [mkMat(0x789e6d, .82), mkMat(0x8fae7a, .74), mkMat(0x567a50, .78)];
+    const petalMat = mkMat(0xf5ddd6, .68);
+    const berryMat = mkMat(0xc67a7a, .88);
 
     // ── Particle pool ─────────────────────────────────────────
-    const COUNT     = Math.max(40, Math.min(80, Math.floor((W * H) / 9000)));
-    const pool      = [];
+    const COUNT = Math.min(65, Math.max(35, Math.floor((W * H) / 8500)));
+    const pool  = [];
 
-    function resetParticle(p, fromBottom) {
-      const y = fromBottom
-        ? -(visH / 2) - Math.random() * visH * 0.6
-        : (Math.random() - 0.5) * visH;
-
-      p.mesh.position.set(
-        (Math.random() - 0.5) * visW * 1.3,
-        y,
-        (Math.random() - 0.5) * 2.5
-      );
-      p.mesh.rotation.set(
-        Math.random() * Math.PI * 2,
-        Math.random() * Math.PI * 2,
-        Math.random() * Math.PI * 2
-      );
-      p.vy    = 0.02 + Math.random() * 0.032;
+    function resetParticle(p, spreadY) {
+      p.mesh.position.x = (Math.random() - 0.5) * W * 1.15;
+      p.mesh.position.y = spreadY
+        ? (Math.random() - 0.5) * H
+        : -H / 2 - 20 - Math.random() * 80;
+      p.mesh.position.z = (Math.random() - 0.5) * 2;
+      p.mesh.rotation.z = Math.random() * Math.PI * 2;
+      p.mesh.rotation.x = (Math.random() - 0.5) * 1.2; // slight 3-D tilt
+      p.vy    = 0.5 + Math.random() * 0.9;              // px / frame
       p.phase = Math.random() * Math.PI * 2;
-      p.amp   = 0.007 + Math.random() * 0.014;
-      p.rx    = (Math.random() - 0.5) * 0.036;
-      p.ry    = (Math.random() - 0.5) * 0.026;
-      p.rz    = (Math.random() - 0.5) * 0.022;
+      p.vrz   = (Math.random() - 0.5) * 0.04;
       p.age   = 0;
     }
 
     for (let i = 0; i < COUNT; i++) {
       const r = Math.random();
-      let mesh;
-
+      let mesh, scale;
       if (r < 0.50) {
-        // Leaf
-        const s = 0.16 + Math.random() * 0.26;
-        mesh = new THREE.Mesh(leafGeo, leafMats[Math.floor(Math.random() * 3)]);
-        mesh.scale.setScalar(s);
+        scale = 0.7 + Math.random() * 1.0;               // leaf  14–30 px tall
+        mesh  = new THREE.Mesh(leafGeo, leafMats[Math.floor(Math.random() * 3)]);
       } else if (r < 0.80) {
-        // Petal
-        const s = 0.55 + Math.random() * 0.5;
-        mesh = new THREE.Mesh(petalGeo, petalMat);
-        mesh.scale.setScalar(s);
+        scale = 0.7 + Math.random() * 0.8;               // petal 7–14 px tall
+        mesh  = new THREE.Mesh(petalGeo, petalMat);
       } else {
-        // Berry
-        const s = 0.5 + Math.random() * 0.5;
-        mesh = new THREE.Mesh(berryGeo, berryMat);
-        mesh.scale.setScalar(s);
+        scale = 0.6 + Math.random() * 0.7;               // berry 4–9 px radius
+        mesh  = new THREE.Mesh(berryGeo, berryMat);
       }
-
+      mesh.scale.setScalar(scale);
       scene.add(mesh);
-      const p = { mesh, vy: 0, phase: 0, amp: 0, rx: 0, ry: 0, rz: 0, age: 0 };
-      resetParticle(p, true);
+
+      const p = { mesh, vy: 0, phase: 0, vrz: 0, age: 0 };
+      resetParticle(p, true);   // seed: spread randomly across screen
       pool.push(p);
     }
 
     // ── Animation loop ────────────────────────────────────────
     let rafId;
-
     (function animate() {
       rafId = requestAnimationFrame(animate);
-
       pool.forEach((p) => {
         p.age++;
         p.mesh.position.y += p.vy;
-        p.mesh.position.x += Math.sin(p.age * 0.038 + p.phase) * p.amp;
-        p.mesh.rotation.x += p.rx;
-        p.mesh.rotation.y += p.ry;
-        p.mesh.rotation.z += p.rz;
-
-        // Recycle particle when it leaves the top
-        if (p.mesh.position.y > visH / 2 + 1.5) resetParticle(p, true);
+        p.mesh.position.x += Math.sin(p.age * 0.03 + p.phase) * 0.45;
+        p.mesh.rotation.z += p.vrz;
+        if (p.mesh.position.y > H / 2 + 25) resetParticle(p, false);
       });
-
-      renderer.render(scene, camera);
+      renderer.render(scene, cam);
     })();
 
     // ── Resize ────────────────────────────────────────────────
     function onResize() {
       const w = window.innerWidth, h = window.innerHeight;
       renderer.setSize(w, h);
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
+      cam.left = -w / 2; cam.right = w / 2;
+      cam.top  =  h / 2; cam.bottom = -h / 2;
+      cam.updateProjectionMatrix();
     }
     window.addEventListener('resize', onResize);
 
-    // ── Cleanup function returned to caller ───────────────────
+    // ── Cleanup ───────────────────────────────────────────────
     return function stop() {
       cancelAnimationFrame(rafId);
       window.removeEventListener('resize', onResize);

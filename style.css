@@ -717,7 +717,7 @@ body {
   pointer-events: none;
 }
 .ty-sprig--l { left: -4px; }
-.ty-sprig--r { right: -4px; transform: scaleX(-1) scaleY(-1); }
+.ty-sprig--r { right: -4px; transform: scaleX(-1); }
 
 .ty-script {
   font-family: var(--f-script);
