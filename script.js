@@ -59,8 +59,8 @@
   }
 
   /* ── 3 · Countdown timer ────────────────────────────────── */
-  // Target: 12 December 2026, 3:00 pm local time.
-  const TARGET = new Date(2026, 11, 12, 15, 0, 0); // month is 0-indexed
+  // Target: 10 October 2026, 3:00 pm local time.
+  const TARGET = new Date(2026, 9, 10, 15, 0, 0); // month is 0-indexed
   const pad = (n) => String(Math.max(0, n)).padStart(2, '0');
 
   const els = {
