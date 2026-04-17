@@ -124,19 +124,27 @@
 })();
 
 /* ── 5 · YouTube background music player ────────────────────
-   Starts muted (required by browsers) and unmutes automatically
-   on the first user interaction (scroll, touch, or click).
+   Starts muted (browser autoplay requirement) and unmutes on
+   the first user interaction. Two-flag approach handles both
+   orderings: player-ready-first OR user-interacts-first.
    ─────────────────────────────────────────────────────────── */
 (function () {
   'use strict';
 
-  const VIDEO_ID = 'svjMiqVeiG8';
-  const LIST_ID  = 'RDsvjMiqVeiG8';
-  let   player   = null;
-  let   ready    = false;
-  let   unmuted  = false;
+  const VIDEO_ID      = 'svjMiqVeiG8';
+  const LIST_ID       = 'RDsvjMiqVeiG8';
+  let   player        = null;
+  let   playerReady   = false;
+  let   userActed     = false;
 
-  // Called by YouTube IFrame API once script loads
+  function tryUnmute() {
+    if (playerReady && userActed && player) {
+      player.unMute();
+      player.setVolume(60);
+    }
+  }
+
+  // YouTube IFrame API callback
   window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player('ytPlayer', {
       videoId: VIDEO_ID,
@@ -144,7 +152,7 @@
         listType      : 'playlist',
         list          : LIST_ID,
         autoplay      : 1,
-        mute          : 1,   // must start muted for autoplay to work
+        mute          : 1,
         loop          : 1,
         controls      : 0,
         disablekb     : 1,
@@ -154,26 +162,25 @@
         rel           : 0,
       },
       events: {
-        onReady      : function (e) { ready = true; e.target.playVideo(); },
+        onReady: function (e) {
+          playerReady = true;
+          e.target.playVideo();
+          tryUnmute();                // unmute immediately if user already acted
+        },
         onStateChange: function (e) {
-          // Loop fallback if playlist ends
           if (e.data === YT.PlayerState.ENDED) e.target.playVideo();
         },
       },
     });
   };
 
-  // Unmute on the very first user interaction with the page
+  // First interaction → set flag and try to unmute
   function onFirstInteraction() {
-    if (unmuted) return;
-    unmuted = true;
-    if (ready && player) {
-      player.unMute();
-      player.setVolume(60);
-    }
-    // Remove all listeners — only needed once
+    if (userActed) return;
+    userActed = true;
+    tryUnmute();
     ['touchstart', 'mousedown', 'keydown', 'scroll'].forEach(function (evt) {
-      document.removeEventListener(evt, onFirstInteraction, { passive: true });
+      document.removeEventListener(evt, onFirstInteraction);
     });
   }
 
