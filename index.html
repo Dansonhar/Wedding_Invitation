@@ -371,6 +371,27 @@
     <div class="stack__end" aria-hidden="true"></div>
   </main>
 
+  <!-- ── Hidden YouTube player ── -->
+  <div id="ytPlayer" aria-hidden="true"></div>
+
+  <!-- ── Floating music control ── -->
+  <button class="music-btn" id="musicBtn" aria-label="Toggle background music" title="Toggle music">
+    <!-- Note icon (playing) -->
+    <svg class="music-btn__ico music-btn__ico--note" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 18V6l12-2v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+      <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2"/>
+    </svg>
+    <!-- Pause icon -->
+    <svg class="music-btn__ico music-btn__ico--pause" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor"/>
+      <rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor"/>
+    </svg>
+    <span class="music-btn__hint">♪ Play Music</span>
+  </button>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script src="script.js"></script>
 </body>
 </html>

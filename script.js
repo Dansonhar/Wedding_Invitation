@@ -5,7 +5,7 @@
      2 · Gentle parallax on botanical background
      3 · Countdown timer to 10 October 2026, 15:00 local
      4 · RSVP form handler
-     5 · Thank You overlay
+     5 · YouTube background music player
    ============================================================= */
 
 (() => {
@@ -121,5 +121,89 @@
     });
   }
 
-
 })();
+
+/* ── 5 · YouTube background music player ────────────────────
+   The YT IFrame API calls onYouTubeIframeAPIReady() globally.
+   Browsers block autoplay with sound until a user gesture,
+   so we start muted and unmute on first tap/click.
+   ─────────────────────────────────────────────────────────── */
+(function () {
+  'use strict';
+
+  const VIDEO_ID  = 'svjMiqVeiG8';
+  const LIST_ID   = 'RDsvjMiqVeiG8';
+  const btn       = document.getElementById('musicBtn');
+  let   player    = null;
+  let   isPlaying = false;
+  let   muted     = true;
+  let   ready     = false;
+
+  // Called by YouTube IFrame API once script loads
+  window.onYouTubeIframeAPIReady = function () {
+    player = new YT.Player('ytPlayer', {
+      videoId: VIDEO_ID,
+      playerVars: {
+        listType    : 'playlist',
+        list        : LIST_ID,
+        autoplay    : 1,
+        mute        : 1,        // start muted (required for autoplay)
+        loop        : 1,
+        controls    : 0,
+        disablekb   : 1,
+        iv_load_policy: 3,
+        modestbranding: 1,
+        playsinline : 1,
+        rel         : 0,
+      },
+      events: {
+        onReady      : onPlayerReady,
+        onStateChange: onStateChange,
+      },
+    });
+  };
+
+  function onPlayerReady() {
+    ready = true;
+    player.playVideo();
+    isPlaying = true;
+    updateBtn();
+  }
+
+  function onStateChange(e) {
+    // YT.PlayerState: PLAYING = 1, PAUSED = 2, ENDED = 0
+    isPlaying = (e.data === YT.PlayerState.PLAYING);
+    updateBtn();
+    // Auto-advance if ended (loop fallback)
+    if (e.data === YT.PlayerState.ENDED) player.playVideo();
+  }
+
+  function updateBtn() {
+    if (!btn) return;
+    btn.classList.toggle('is-playing', isPlaying && !muted);
+    btn.classList.toggle('is-compact',  !muted);
+  }
+
+  // First user interaction → unmute; subsequent clicks → toggle pause
+  if (btn) {
+    btn.addEventListener('click', function () {
+      if (!ready) return;
+
+      if (muted) {
+        // First tap: unmute and play
+        player.unMute();
+        player.setVolume(70);
+        muted = false;
+        player.playVideo();
+        isPlaying = true;
+      } else if (isPlaying) {
+        player.pauseVideo();
+        isPlaying = false;
+      } else {
+        player.playVideo();
+        isPlaying = true;
+      }
+      updateBtn();
+    });
+  }
+}());

@@ -759,7 +759,77 @@ body {
   html { scroll-behavior: auto; }
 }
 
-/* ── 15 · Small phones (≤360px) ───────────────────────────── */
+/* ── 15 · Music player button ─────────────────────────────── */
+#ytPlayer {
+  position: fixed;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  bottom: 0; right: 0;
+}
+
+.music-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 20px;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px 10px 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(40, 30, 20, 0.22);
+  transition: background .3s var(--ease), transform .25s var(--ease), padding .4s var(--ease);
+  white-space: nowrap;
+}
+.music-btn:hover  { background: #1f1a16; transform: translateY(-2px); }
+.music-btn:active { transform: translateY(0); }
+
+.music-btn__ico {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: block;
+}
+.music-btn__ico--pause { display: none; }
+
+/* When music is playing: show pause icon, hide note icon */
+.music-btn.is-playing .music-btn__ico--note  { display: none; }
+.music-btn.is-playing .music-btn__ico--pause { display: block; }
+
+/* After first interaction: collapse hint text */
+.music-btn__hint {
+  font-family: var(--f-serif);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--paper);
+  transition: max-width .4s var(--ease), opacity .4s var(--ease);
+  max-width: 100px;
+  overflow: hidden;
+  opacity: 1;
+}
+.music-btn.is-playing .music-btn__hint,
+.music-btn.is-compact  .music-btn__hint {
+  max-width: 0;
+  opacity: 0;
+  padding: 0;
+}
+.music-btn.is-compact { padding: 10px 12px; border-radius: 50%; }
+
+/* Gentle pulse on the button before first play */
+@keyframes musicPulse {
+  0%, 100% { box-shadow: 0 4px 18px rgba(40,30,20,.22); }
+  50%       { box-shadow: 0 4px 24px rgba(40,30,20,.4), 0 0 0 6px rgba(58,53,49,.12); }
+}
+.music-btn:not(.is-compact) { animation: musicPulse 2.4s ease-in-out infinite; }
+.music-btn.is-compact       { animation: none; }
+
+/* ── 16 · Small phones (≤360px) ───────────────────────────── */
 @media (max-width: 360px) {
   .stack { padding: 20px 10px 48px; gap: 32px; }
   .card__inner { padding: 36px 18px; }
