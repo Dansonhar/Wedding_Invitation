@@ -6,7 +6,6 @@
      3 · Countdown timer to 10 October 2026, 15:00 local
      4 · RSVP form handler
      5 · Thank You overlay
-     6 · Three.js botanical particle system
    ============================================================= */
 
 (() => {
@@ -125,7 +124,6 @@
     const overlay  = document.getElementById('tyOverlay');
     const nameEl   = document.getElementById('tyName');
     const closeBtn = document.getElementById('tyClose');
-    const canvas   = document.getElementById('tyCanvas');
     if (!overlay) return;
 
     if (nameEl && guestName) nameEl.textContent = '— ' + guestName + ' —';
@@ -133,14 +131,8 @@
     // Activate overlay
     requestAnimationFrame(() => overlay.classList.add('is-active'));
 
-    // Launch Three.js particles (skip if reduced-motion or Three unavailable)
-    const stopParticles = (typeof THREE !== 'undefined' && !prefersReducedMotion)
-      ? startBotanicalParticles(canvas)
-      : () => {};
-
     function close() {
       overlay.classList.remove('is-active');
-      overlay.addEventListener('transitionend', stopParticles, { once: true });
     }
 
     closeBtn.addEventListener('click', close, { once: true });
@@ -148,125 +140,5 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); }, { once: true });
   }
 
-  /* ── 6 · Three.js botanical particle system ─────────────── */
-  function startBotanicalParticles(canvas) {
-    const W = window.innerWidth;
-    const H = window.innerHeight;
-
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(W, H);
-    renderer.setClearColor(0x000000, 0);
-
-    const scene = new THREE.Scene();
-
-    // Orthographic camera: 1 world unit = 1 CSS pixel — exact, predictable sizing
-    const cam = new THREE.OrthographicCamera(-W / 2, W / 2, H / 2, -H / 2, 0.1, 10);
-    cam.position.z = 5;
-
-    // ── Geometries (sizes in pixels) ──────────────────────────
-    // Leaf: slim diamond  ~10 × 20 px
-    // Petal: wide diamond ~16 × 10 px
-    // Berry: circle       ~7 px radius
-    function makeDiamond(w, h) {
-      const hw = w / 2, hh = h / 2;
-      const pos = new Float32Array([
-         0,  hh, 0,   // top
-        hw,   0, 0,   // right
-         0, -hh, 0,   // bottom
-       -hw,   0, 0,   // left
-      ]);
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-      geo.setIndex([0, 1, 3,  1, 2, 3]);
-      return geo;
-    }
-
-    const leafGeo  = makeDiamond(10, 20);
-    const petalGeo = makeDiamond(16, 10);
-    const berryGeo = new THREE.CircleGeometry(7, 10);
-
-    // ── Materials ────────────────────────────────────────────
-    const mkMat = (hex, opacity) => new THREE.MeshBasicMaterial({
-      color: hex, transparent: true, opacity, side: THREE.DoubleSide,
-    });
-    const leafMats = [mkMat(0x789e6d, .82), mkMat(0x8fae7a, .74), mkMat(0x567a50, .78)];
-    const petalMat = mkMat(0xf5ddd6, .68);
-    const berryMat = mkMat(0xc67a7a, .88);
-
-    // ── Particle pool ─────────────────────────────────────────
-    const COUNT = Math.min(65, Math.max(35, Math.floor((W * H) / 8500)));
-    const pool  = [];
-
-    function resetParticle(p, spreadY) {
-      p.mesh.position.x = (Math.random() - 0.5) * W * 1.15;
-      p.mesh.position.y = spreadY
-        ? (Math.random() - 0.5) * H
-        : -H / 2 - 20 - Math.random() * 80;
-      p.mesh.position.z = (Math.random() - 0.5) * 2;
-      p.mesh.rotation.z = Math.random() * Math.PI * 2;
-      p.mesh.rotation.x = (Math.random() - 0.5) * 1.2; // slight 3-D tilt
-      p.vy    = 0.5 + Math.random() * 0.9;              // px / frame
-      p.phase = Math.random() * Math.PI * 2;
-      p.vrz   = (Math.random() - 0.5) * 0.04;
-      p.age   = 0;
-    }
-
-    for (let i = 0; i < COUNT; i++) {
-      const r = Math.random();
-      let mesh, scale;
-      if (r < 0.50) {
-        scale = 0.7 + Math.random() * 1.0;               // leaf  14–30 px tall
-        mesh  = new THREE.Mesh(leafGeo, leafMats[Math.floor(Math.random() * 3)]);
-      } else if (r < 0.80) {
-        scale = 0.7 + Math.random() * 0.8;               // petal 7–14 px tall
-        mesh  = new THREE.Mesh(petalGeo, petalMat);
-      } else {
-        scale = 0.6 + Math.random() * 0.7;               // berry 4–9 px radius
-        mesh  = new THREE.Mesh(berryGeo, berryMat);
-      }
-      mesh.scale.setScalar(scale);
-      scene.add(mesh);
-
-      const p = { mesh, vy: 0, phase: 0, vrz: 0, age: 0 };
-      resetParticle(p, true);   // seed: spread randomly across screen
-      pool.push(p);
-    }
-
-    // ── Animation loop ────────────────────────────────────────
-    let rafId;
-    (function animate() {
-      rafId = requestAnimationFrame(animate);
-      pool.forEach((p) => {
-        p.age++;
-        p.mesh.position.y += p.vy;
-        p.mesh.position.x += Math.sin(p.age * 0.03 + p.phase) * 0.45;
-        p.mesh.rotation.z += p.vrz;
-        if (p.mesh.position.y > H / 2 + 25) resetParticle(p, false);
-      });
-      renderer.render(scene, cam);
-    })();
-
-    // ── Resize ────────────────────────────────────────────────
-    function onResize() {
-      const w = window.innerWidth, h = window.innerHeight;
-      renderer.setSize(w, h);
-      cam.left = -w / 2; cam.right = w / 2;
-      cam.top  =  h / 2; cam.bottom = -h / 2;
-      cam.updateProjectionMatrix();
-    }
-    window.addEventListener('resize', onResize);
-
-    // ── Cleanup ───────────────────────────────────────────────
-    return function stop() {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', onResize);
-      pool.forEach((p) => scene.remove(p.mesh));
-      renderer.dispose();
-      leafGeo.dispose(); petalGeo.dispose(); berryGeo.dispose();
-      leafMats.forEach((m) => m.dispose());
-      petalMat.dispose(); berryMat.dispose();
-    };
-  }
 
 })();

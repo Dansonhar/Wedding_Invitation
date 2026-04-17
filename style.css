@@ -679,12 +679,6 @@ body {
   pointer-events: auto;
 }
 
-.ty-canvas {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
 .ty-card {
   position: relative;
   z-index: 1;
