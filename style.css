@@ -53,7 +53,7 @@ body {
   line-height: 1.7;
   color: var(--ink-soft);
   background: var(--paper);
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -187,14 +187,15 @@ body {
   max-width: var(--card-max);
   width: min(100%, var(--card-max));
   margin: 0 auto;
-  padding: clamp(20px, 5vw, 32px) clamp(12px, 4vw, 16px) 64px;
+  padding: clamp(20px, 5vw, 32px) clamp(12px, 4vw, 16px) clamp(40px, 8vw, 64px);
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 44px;
+  min-height: 100dvh;
 }
-.stack__end { height: 40px; }
+.stack__end { height: 0; }
 
 /* ── 5 · Generic card shell ───────────────────────────────── */
 .card {
@@ -659,7 +660,63 @@ body {
   border-top: 1px solid var(--card-border);
 }
 
-/* ── 14 · Animations ──────────────────────────────────────── */
+/* ── 14 · VENUE / MAP CARD ────────────────────────────────── */
+.venue__pin {
+  width: 32px;
+  height: auto;
+  display: block;
+  margin: 0 auto 18px;
+  color: var(--accent);
+}
+
+.venue__name {
+  font-family: var(--f-serif);
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: clamp(.14em, 1.1vw, .26em);
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.venue__address {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-muted);
+  line-height: 1.9;
+  letter-spacing: .04em;
+  margin-bottom: 26px;
+}
+
+.venue__directions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--f-serif);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .38em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 28px;
+  border: none;
+  cursor: pointer;
+  transition: background .35s var(--ease), letter-spacing .4s var(--ease);
+}
+.venue__directions:hover { background: #1f1a16; letter-spacing: .46em; }
+
+.venue__directions svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+/* ── 15 · Animations ──────────────────────────────────────── */
 .reveal {
   opacity: 0;
   transform: translateY(32px);
