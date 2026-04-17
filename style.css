@@ -661,14 +661,6 @@ body {
 }
 
 /* ── 14 · VENUE / MAP CARD ────────────────────────────────── */
-.venue__pin {
-  width: 32px;
-  height: auto;
-  display: block;
-  margin: 0 auto 18px;
-  color: var(--accent);
-}
-
 .venue__name {
   font-family: var(--f-serif);
   font-weight: 500;
@@ -687,6 +679,21 @@ body {
   line-height: 1.9;
   letter-spacing: .04em;
   margin-bottom: 26px;
+}
+
+.venue__map-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-top: 1px solid var(--card-border);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.venue__map {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
 }
 
 .venue__directions {

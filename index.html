@@ -335,20 +335,29 @@
 
         <div class="divider divider--short"><span></span><i></i><span></span></div>
 
-        <!-- Map pin icon -->
-        <svg class="venue__pin" viewBox="0 0 24 30" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 0C7.17 0 3 4.17 3 9c0 6.75 9 21 9 21s9-14.25 9-21c0-4.83-4.17-9-9-9zm0 12.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" fill="#6b5847"/>
-        </svg>
-
         <p class="venue__name">The Grand Palace Hall</p>
         <p class="venue__address">
           Jalan Ampang, KLCC<br/>
           50450 Kuala Lumpur<br/>
           Wilayah Persekutuan, Malaysia
         </p>
+      </div>
 
+      <!-- Embedded Google Map -->
+      <div class="venue__map-wrap">
+        <iframe
+          class="venue__map"
+          src="https://share.google/KFJEeA27HeslkkXjs"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Wedding venue location"
+        ></iframe>
+      </div>
+
+      <div class="card__inner card__inner--tight">
         <a class="venue__directions"
-           href="https://www.google.com/maps/search/?api=1&query=Kuala+Lumpur+Convention+Centre+Malaysia"
+           href="https://share.google/KFJEeA27HeslkkXjs"
            target="_blank"
            rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
