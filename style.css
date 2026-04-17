@@ -659,7 +659,104 @@ body {
   border-top: 1px solid var(--card-border);
 }
 
-/* ── 14 · Animations ──────────────────────────────────────── */
+/* ── 14 · Thank You overlay ───────────────────────────────── */
+.ty-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(247, 241, 227, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .55s var(--ease);
+}
+.ty-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ty-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ty-card {
+  position: relative;
+  z-index: 1;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow:
+    0 2px 4px rgba(90, 70, 40, 0.06),
+    0 20px 60px rgba(90, 70, 40, 0.14);
+  text-align: center;
+  padding: clamp(40px, 8vw, 56px) clamp(28px, 7vw, 44px) clamp(36px, 7vw, 48px);
+  max-width: min(360px, 90vw);
+  width: 100%;
+  transform: translateY(28px) scale(.96);
+  transition: transform .7s var(--ease);
+  overflow: hidden;
+}
+.ty-overlay.is-active .ty-card {
+  transform: translateY(0) scale(1);
+}
+
+/* Small botanical sprigs in card corners */
+.ty-sprig {
+  position: absolute;
+  top: -4px;
+  width: 72px;
+  height: auto;
+  opacity: .9;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.ty-sprig--l { left: -4px; }
+.ty-sprig--r { right: -4px; transform: scaleX(-1) scaleY(-1); }
+
+.ty-script {
+  font-family: var(--f-script);
+  font-size: clamp(52px, 15vw, 68px);
+  color: var(--accent);
+  line-height: 1;
+  margin: 8px 0 18px;
+  font-weight: 400;
+}
+
+.ty-body {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 2;
+  letter-spacing: .04em;
+  margin-bottom: 14px;
+}
+
+.ty-name {
+  font-family: var(--f-serif);
+  font-size: 11px;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 28px;
+  min-height: 1em;
+}
+
+.ty-close {
+  width: auto;
+  padding: 12px 38px;
+  font-size: 11px;
+  letter-spacing: .38em;
+  margin-top: 0;
+}
+
+/* ── 14b · Animations ─────────────────────────────────────── */
 .reveal {
   opacity: 0;
   transform: translateY(32px);

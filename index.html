@@ -13,6 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js"></script>
 </head>
 
 <body>
@@ -320,7 +321,6 @@
           </div>
 
           <button type="submit" class="btn-dark">Submit</button>
-          <p class="rsvp__ok" id="rsvpSuccess" hidden>✓ Thank you — your reply has been received.</p>
         </form>
 
         <p class="footer-line">— Welcome to our Wedding —</p>
@@ -330,6 +330,54 @@
     <!-- Final spacing -->
     <div class="stack__end" aria-hidden="true"></div>
   </main>
+
+  <!-- ═══════════════════════════════════════════════════════
+       THANK YOU OVERLAY
+       Shown after successful RSVP submission.
+       Three.js botanical particles float behind the card.
+       ═══════════════════════════════════════════════════════ -->
+  <div class="ty-overlay" id="tyOverlay" aria-modal="true" role="dialog" aria-label="Thank you">
+    <canvas class="ty-canvas" id="tyCanvas" aria-hidden="true"></canvas>
+
+    <div class="ty-card">
+      <!-- Botanical corner accent top-left -->
+      <svg class="ty-sprig ty-sprig--l" viewBox="0 0 80 90" aria-hidden="true">
+        <g fill="none" stroke="#789e6d" stroke-linecap="round">
+          <path d="M10 80 Q 35 45 70 10" stroke-width="1.4" opacity=".6"/>
+          <g fill="#8fae7a" opacity=".85">
+            <ellipse cx="24" cy="62" rx="13" ry="5" transform="rotate(-42 24 62)"/>
+            <ellipse cx="40" cy="44" rx="14" ry="5" transform="rotate(-48 40 44)"/>
+            <ellipse cx="56" cy="26" rx="13" ry="5" transform="rotate(-54 56 26)"/>
+          </g>
+          <circle cx="18" cy="70" r="3.5" fill="#c67a7a"/>
+          <circle cx="26" cy="68" r="3"   fill="#b66666"/>
+        </g>
+      </svg>
+      <!-- Botanical corner accent top-right (mirrored) -->
+      <svg class="ty-sprig ty-sprig--r" viewBox="0 0 80 90" aria-hidden="true">
+        <g fill="none" stroke="#789e6d" stroke-linecap="round">
+          <path d="M70 80 Q 45 45 10 10" stroke-width="1.4" opacity=".6"/>
+          <g fill="#8fae7a" opacity=".85">
+            <ellipse cx="56" cy="62" rx="13" ry="5" transform="rotate(42 56 62)"/>
+            <ellipse cx="40" cy="44" rx="14" ry="5" transform="rotate(48 40 44)"/>
+            <ellipse cx="24" cy="26" rx="13" ry="5" transform="rotate(54 24 26)"/>
+          </g>
+          <circle cx="62" cy="70" r="3.5" fill="#c67a7a"/>
+          <circle cx="54" cy="68" r="3"   fill="#b66666"/>
+        </g>
+      </svg>
+
+      <p class="eyebrow">With Gratitude</p>
+      <p class="ty-script">Thank You</p>
+      <div class="divider divider--short"><span></span><i></i><span></span></div>
+      <p class="ty-body">
+        Your RSVP has been received.<br/>
+        We can't wait to celebrate with you.
+      </p>
+      <p class="ty-name" id="tyName"></p>
+      <button class="ty-close btn-dark" id="tyClose">Close</button>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
