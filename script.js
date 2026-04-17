@@ -111,33 +111,14 @@
         return;
       }
 
-      // Disable form while overlay is shown.
+      // In production, POST the data to your backend or Google Form here.
       form.querySelectorAll('input, select, button').forEach((el) => (el.disabled = true));
-
-      // Show botanical thank-you overlay.
-      showThankYou(name);
+      const ok = document.getElementById('rsvpSuccess');
+      if (ok) {
+        ok.hidden = false;
+        ok.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+      }
     });
-  }
-
-  /* ── 5 · Thank You overlay ───────────────────────────────── */
-  function showThankYou(guestName) {
-    const overlay  = document.getElementById('tyOverlay');
-    const nameEl   = document.getElementById('tyName');
-    const closeBtn = document.getElementById('tyClose');
-    if (!overlay) return;
-
-    if (nameEl && guestName) nameEl.textContent = '— ' + guestName + ' —';
-
-    // Activate overlay
-    requestAnimationFrame(() => overlay.classList.add('is-active'));
-
-    function close() {
-      overlay.classList.remove('is-active');
-    }
-
-    closeBtn.addEventListener('click', close, { once: true });
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); }, { once: true });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); }, { once: true });
   }
 
 
