@@ -39,8 +39,13 @@ html, body {
 body { position: fixed; inset: 0; }
 
 /* ═══════════════════════════════════════════════════════
-   SHARED DECOR — fixed botanical backdrop on every page
+   SHARED DECOR — parallax botanical backdrop
+   Each layer shifts at a different rate (-pi driven by JS) so
+   foreground twig + berries drift faster than background leaves,
+   producing a 3D depth illusion while swiping pages.
    ═══════════════════════════════════════════════════════ */
+body { --pi: 0; }                /* current page index, set in JS */
+
 .decor {
   position: fixed;
   inset: 0;
@@ -48,29 +53,65 @@ body { position: fixed; inset: 0; }
   pointer-events: none;
   overflow: hidden;
 }
+
+/* TRANSITION tuning for every parallax layer */
+.decor-leaves, .decor-twig, .decor-berries {
+  transition:
+    transform 1100ms cubic-bezier(.22,1,.36,1),
+    filter   1100ms ease;
+  will-change: transform;
+}
+
+/* Background layer (slowest — further away) */
 .decor-leaves {
   position: absolute;
   top: 0;
   width: 78%;
   height: 58%;
   filter: blur(.3px);
+  transform:
+    translateY(calc(var(--pi) * -12vh))
+    scale(calc(1 - var(--pi) * 0.03));
 }
-.decor-leaves--left  { left: -10%; }
-.decor-leaves--right { right: -10%; }
+.decor-leaves--left  {
+  left: -10%;
+  transform:
+    translateY(calc(var(--pi) * -10vh))
+    rotate(calc(var(--pi) * 1.5deg))
+    scale(calc(1 - var(--pi) * 0.03));
+}
+.decor-leaves--right {
+  right: -10%;
+  transform:
+    translateY(calc(var(--pi) * -14vh))
+    rotate(calc(var(--pi) * -1.5deg))
+    scale(calc(1 - var(--pi) * 0.03));
+}
 
+/* Midground layer — moves faster */
 .decor-twig {
   position: absolute;
   left: 4%;
   bottom: 5%;
   width: 70px;
   height: 220px;
+  transform:
+    translateY(calc(var(--pi) * -22vh))
+    translateX(calc(var(--pi) * -10px))
+    scale(calc(1 + var(--pi) * .04));
 }
+
+/* Foreground layer — fastest, closest to viewer */
 .decor-berries {
   position: absolute;
   right: 0;
   bottom: 2%;
   width: 120px;
   height: 220px;
+  transform:
+    translateY(calc(var(--pi) * -26vh))
+    translateX(calc(var(--pi) * 14px))
+    scale(calc(1 + var(--pi) * .06));
 }
 
 /* ─── Falling leaves ──────────────────────────────────────
@@ -351,7 +392,15 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: .5px;
   margin: 0 0 26px;
   line-height: 1;
+  /* Gold glow pulse that kicks in once letters are in */
+  animation: goldGlow 5s ease-in-out 1800ms infinite;
 }
+@keyframes goldGlow {
+  0%, 100% { text-shadow: 0 0 0 rgba(156, 123, 85, 0); }
+  50%      { text-shadow: 0 0 28px rgba(156, 123, 85, .35),
+                          0 0 12px rgba(182, 149, 113, .25); }
+}
+
 .cover-names {
   font-family: var(--f-serif);
   font-size: clamp(20px, 5.2vw, 26px);
@@ -359,10 +408,45 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 2px;
   margin: 0;
   font-weight: 500;
+  /* Subtle float drift — premium, readable, not distracting */
+  animation: nameFloat 6s ease-in-out 2400ms infinite;
 }
 .cover-names .amp {
   margin: 0 .4em;
   color: var(--c-gold);
+  display: inline-block;
+  animation: ampBreathe 3s ease-in-out 2600ms infinite;
+}
+.cover-names .name-part { display: inline-block; }
+
+@keyframes nameFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+@keyframes ampBreathe {
+  0%, 100% { transform: scale(1); opacity: .85; }
+  50%      { transform: scale(1.15); opacity: 1; }
+}
+
+/* ─── Letter-by-letter reveal ─────────────────────────────
+   Each letter blur-clears in, floats up from below, and eases
+   into place with a bouncy scale curve. Stagger driven by --l.
+   ─────────────────────────────────────────────────────── */
+.ltr {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(28px) scale(.85);
+  filter: blur(8px);
+  transition:
+    opacity .8s ease,
+    transform .8s cubic-bezier(.22, 1.35, .36, 1),
+    filter .8s ease;
+  transition-delay: calc(var(--l-start, 0ms) + var(--l, 0) * 55ms);
+}
+.page.is-active .ltr {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
 }
 .cover-thanks {
   position: absolute;

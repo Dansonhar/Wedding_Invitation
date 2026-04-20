@@ -25,6 +25,8 @@
   function setActive(idx) {
     pages.forEach((p, i) => p.classList.toggle('is-active', i === idx));
     [...dotsEl.children].forEach((d, i) => d.classList.toggle('is-on', i === idx));
+    // Feed the parallax layers — decor responds at slower speeds than the pager
+    document.body.style.setProperty('--pi', idx);
   }
 
   function goTo(idx) {
@@ -143,6 +145,36 @@
 
   // Expose for the music module below
   window.__goTo = goTo;
+
+  /* ── Letter-splitter: wraps each character of an element in a
+     span with a --l index so CSS can stagger entrances.
+     Applied to hero text (cover title + couple names) for the
+     premium letter-by-letter reveal. ─────────────────────── */
+  function splitLetters(el, startDelay = 0) {
+    if (!el || el.dataset.split) return;
+    const text = el.textContent;
+    el.textContent = '';
+    let i = 0;
+    for (const ch of text) {
+      if (ch === ' ') {
+        el.appendChild(document.createTextNode(' '));
+      } else {
+        const s = document.createElement('span');
+        s.className = 'ltr';
+        s.style.setProperty('--l', i);
+        s.style.setProperty('--l-start', startDelay + 'ms');
+        s.textContent = ch;
+        el.appendChild(s);
+      }
+      i++;
+    }
+    el.dataset.split = '1';
+  }
+  splitLetters(document.querySelector('.cover-title'), 200);
+  // Split "Adrian Yeow" and "Charlotte Har" separately so the amp (&) stays intact
+  document.querySelectorAll('.cover-names .name-part').forEach((el, idx) => {
+    splitLetters(el, 900 + idx * 500);
+  });
 })();
 
 /* ═══════════════════════════════════════════════════════
