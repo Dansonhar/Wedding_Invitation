@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
   <title>Adrian &amp; Charlotte — Wedding Invitation</title>
-  <meta name="description" content="A botanical wedding invitation e-card for Adrian &amp; Charlotte." />
-  <meta name="theme-color" content="#f7f1e3" />
+  <meta name="description" content="Wedding invitation for Adrian Yeow &amp; Charlotte Har — 10 October 2026, Pullman KLCC." />
+  <meta name="theme-color" content="#ffffff" />
 
-  <!-- ── Google Fonts: serif + script + body ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Dancing+Script:wght@500;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -18,351 +17,414 @@
 <body>
 
   <!-- ═══════════════════════════════════════════════════════
-       BOTANICAL BACKGROUND
-       Fixed decorative layer behind the cards.
-       Parallax is applied subtly in script.js.
+       SHARED DECOR — botanical backdrop for every page
+       Pine leaves top-left & top-right, brown twig bottom-left,
+       red berries bottom-right. Soft sway animations.
        ═══════════════════════════════════════════════════════ -->
-  <div class="bg" id="bg" aria-hidden="true">
-    <div class="bg__paper"></div>
-
-    <!-- Top-left leafy branch -->
-    <svg class="bg__leaf bg__leaf--tl" viewBox="0 0 220 260" xmlns="http://www.w3.org/2000/svg">
-      <g fill="none" stroke="#789e6d" stroke-linecap="round">
-        <path d="M10 10 C 60 80, 100 120, 170 220" stroke-width="1.8" opacity=".7"/>
-        <!-- leaves clustered along the stem -->
-        <g fill="#8fae7a" opacity=".82">
-          <ellipse cx="38" cy="44" rx="18" ry="7" transform="rotate(-40 38 44)"/>
-          <ellipse cx="30" cy="58" rx="15" ry="6" transform="rotate(35 30 58)"/>
-          <ellipse cx="64" cy="82" rx="20" ry="8" transform="rotate(-30 64 82)"/>
-          <ellipse cx="58" cy="102" rx="17" ry="7" transform="rotate(42 58 102)"/>
-          <ellipse cx="92" cy="128" rx="22" ry="8" transform="rotate(-28 92 128)"/>
-          <ellipse cx="84" cy="150" rx="18" ry="7" transform="rotate(40 84 150)"/>
-          <ellipse cx="118" cy="176" rx="22" ry="8" transform="rotate(-32 118 176)"/>
-          <ellipse cx="112" cy="198" rx="17" ry="6" transform="rotate(38 112 198)"/>
-          <ellipse cx="146" cy="214" rx="22" ry="8" transform="rotate(-30 146 214)"/>
+  <div class="decor" aria-hidden="true">
+    <svg class="decor-leaves decor-leaves--left" viewBox="0 0 300 400" preserveAspectRatio="xMinYMin slice">
+      <g class="sway sway--a">
+        <path d="M40 0 C 50 80, 80 160, 120 260" stroke="#6a8a5c" stroke-width="1.6" fill="none" opacity="0.7"/>
+        <g fill="#7a9d6a" opacity="0.78">
+          <ellipse cx="30" cy="30" rx="40" ry="4" transform="rotate(75 30 30)"/>
+          <ellipse cx="38" cy="50" rx="42" ry="4" transform="rotate(78 38 50)"/>
+          <ellipse cx="46" cy="70" rx="44" ry="4" transform="rotate(80 46 70)"/>
+          <ellipse cx="54" cy="90" rx="46" ry="4" transform="rotate(82 54 90)"/>
+          <ellipse cx="62" cy="110" rx="48" ry="4" transform="rotate(84 62 110)"/>
+          <ellipse cx="72" cy="132" rx="50" ry="4" transform="rotate(85 72 132)"/>
+          <ellipse cx="82" cy="155" rx="52" ry="4" transform="rotate(86 82 155)"/>
+          <ellipse cx="92" cy="178" rx="52" ry="4" transform="rotate(87 92 178)"/>
+          <ellipse cx="102" cy="202" rx="50" ry="4" transform="rotate(88 102 202)"/>
+          <ellipse cx="110" cy="225" rx="48" ry="4" transform="rotate(89 110 225)"/>
         </g>
-        <!-- deeper-green veins -->
-        <g stroke="#567a50" stroke-width="1" opacity=".5">
-          <path d="M20 36 l34 14"/>
-          <path d="M48 74 l28 14"/>
-          <path d="M76 120 l32 14"/>
-          <path d="M104 168 l32 14"/>
+        <g fill="#8fae7a" opacity="0.65">
+          <ellipse cx="20" cy="40" rx="36" ry="3.5" transform="rotate(70 20 40)"/>
+          <ellipse cx="32" cy="70" rx="38" ry="3.5" transform="rotate(72 32 70)"/>
+          <ellipse cx="46" cy="100" rx="40" ry="3.5" transform="rotate(74 46 100)"/>
+          <ellipse cx="62" cy="132" rx="42" ry="3.5" transform="rotate(76 62 132)"/>
+          <ellipse cx="78" cy="164" rx="44" ry="3.5" transform="rotate(78 78 164)"/>
+          <ellipse cx="94" cy="196" rx="44" ry="3.5" transform="rotate(80 94 196)"/>
+        </g>
+      </g>
+      <g class="sway sway--b">
+        <path d="M140 0 C 145 60, 160 120, 180 200" stroke="#6a8a5c" stroke-width="1.4" fill="none" opacity="0.55"/>
+        <g fill="#a7c191" opacity="0.6">
+          <ellipse cx="138" cy="30" rx="30" ry="3" transform="rotate(82 138 30)"/>
+          <ellipse cx="145" cy="60" rx="34" ry="3" transform="rotate(84 145 60)"/>
+          <ellipse cx="155" cy="90" rx="36" ry="3" transform="rotate(85 155 90)"/>
+          <ellipse cx="165" cy="122" rx="38" ry="3" transform="rotate(86 165 122)"/>
+          <ellipse cx="175" cy="156" rx="38" ry="3" transform="rotate(87 175 156)"/>
+        </g>
+      </g>
+      <g opacity="0.32" fill="#c8ce8a">
+        <circle cx="70" cy="260" r="16"/>
+        <circle cx="88" cy="272" r="12"/>
+        <circle cx="100" cy="256" r="10"/>
+        <circle cx="110" cy="276" r="14"/>
+      </g>
+    </svg>
+
+    <svg class="decor-leaves decor-leaves--right" viewBox="0 0 300 400" preserveAspectRatio="xMaxYMin slice">
+      <g class="sway sway--c">
+        <path d="M260 0 C 250 80, 220 160, 180 260" stroke="#6a8a5c" stroke-width="1.6" fill="none" opacity="0.7"/>
+        <g fill="#7a9d6a" opacity="0.78">
+          <ellipse cx="270" cy="30" rx="40" ry="4" transform="rotate(-75 270 30)"/>
+          <ellipse cx="262" cy="50" rx="42" ry="4" transform="rotate(-78 262 50)"/>
+          <ellipse cx="254" cy="70" rx="44" ry="4" transform="rotate(-80 254 70)"/>
+          <ellipse cx="246" cy="90" rx="46" ry="4" transform="rotate(-82 246 90)"/>
+          <ellipse cx="238" cy="110" rx="48" ry="4" transform="rotate(-84 238 110)"/>
+          <ellipse cx="228" cy="132" rx="50" ry="4" transform="rotate(-85 228 132)"/>
+          <ellipse cx="218" cy="155" rx="52" ry="4" transform="rotate(-86 218 155)"/>
+          <ellipse cx="208" cy="178" rx="52" ry="4" transform="rotate(-87 208 178)"/>
+          <ellipse cx="198" cy="202" rx="50" ry="4" transform="rotate(-88 198 202)"/>
+          <ellipse cx="190" cy="225" rx="48" ry="4" transform="rotate(-89 190 225)"/>
+        </g>
+        <g fill="#8fae7a" opacity="0.65">
+          <ellipse cx="280" cy="40" rx="36" ry="3.5" transform="rotate(-70 280 40)"/>
+          <ellipse cx="268" cy="70" rx="38" ry="3.5" transform="rotate(-72 268 70)"/>
+          <ellipse cx="254" cy="100" rx="40" ry="3.5" transform="rotate(-74 254 100)"/>
+          <ellipse cx="238" cy="132" rx="42" ry="3.5" transform="rotate(-76 238 132)"/>
+          <ellipse cx="222" cy="164" rx="44" ry="3.5" transform="rotate(-78 222 164)"/>
+          <ellipse cx="206" cy="196" rx="44" ry="3.5" transform="rotate(-80 206 196)"/>
+        </g>
+      </g>
+      <g class="sway sway--d">
+        <path d="M160 0 C 155 60, 140 120, 120 200" stroke="#6a8a5c" stroke-width="1.4" fill="none" opacity="0.55"/>
+        <g fill="#a7c191" opacity="0.6">
+          <ellipse cx="162" cy="30" rx="30" ry="3" transform="rotate(-82 162 30)"/>
+          <ellipse cx="155" cy="60" rx="34" ry="3" transform="rotate(-84 155 60)"/>
+          <ellipse cx="145" cy="90" rx="36" ry="3" transform="rotate(-85 145 90)"/>
+          <ellipse cx="135" cy="122" rx="38" ry="3" transform="rotate(-86 135 122)"/>
+          <ellipse cx="125" cy="156" rx="38" ry="3" transform="rotate(-87 125 156)"/>
         </g>
       </g>
     </svg>
 
-    <!-- Top-right mirrored branch -->
-    <svg class="bg__leaf bg__leaf--tr" viewBox="0 0 220 260" xmlns="http://www.w3.org/2000/svg">
-      <g fill="none" stroke="#789e6d" stroke-linecap="round">
-        <path d="M210 10 C 160 80, 120 120, 50 220" stroke-width="1.8" opacity=".7"/>
-        <g fill="#8fae7a" opacity=".82">
-          <ellipse cx="182" cy="44" rx="18" ry="7" transform="rotate(40 182 44)"/>
-          <ellipse cx="190" cy="58" rx="15" ry="6" transform="rotate(-35 190 58)"/>
-          <ellipse cx="156" cy="82" rx="20" ry="8" transform="rotate(30 156 82)"/>
-          <ellipse cx="162" cy="102" rx="17" ry="7" transform="rotate(-42 162 102)"/>
-          <ellipse cx="128" cy="128" rx="22" ry="8" transform="rotate(28 128 128)"/>
-          <ellipse cx="136" cy="150" rx="18" ry="7" transform="rotate(-40 136 150)"/>
-          <ellipse cx="102" cy="176" rx="22" ry="8" transform="rotate(32 102 176)"/>
-          <ellipse cx="108" cy="198" rx="17" ry="6" transform="rotate(-38 108 198)"/>
-          <ellipse cx="74" cy="214" rx="22" ry="8" transform="rotate(30 74 214)"/>
+    <svg class="decor-twig" viewBox="0 0 100 280">
+      <g class="sway sway--slow">
+        <path d="M50 0 Q 48 80, 52 160 T 54 280" stroke="#8c6a3e" stroke-width="1.2" fill="none" opacity="0.8"/>
+        <g fill="#8c6a3e" opacity="0.75">
+          <ellipse cx="46" cy="40" rx="6" ry="2.5" transform="rotate(-35 46 40)"/>
+          <ellipse cx="56" cy="70" rx="6" ry="2.5" transform="rotate(40 56 70)"/>
+          <ellipse cx="44" cy="110" rx="7" ry="2.5" transform="rotate(-35 44 110)"/>
+          <ellipse cx="58" cy="150" rx="7" ry="2.5" transform="rotate(40 58 150)"/>
+          <ellipse cx="46" cy="190" rx="7" ry="2.5" transform="rotate(-35 46 190)"/>
+          <ellipse cx="58" cy="230" rx="7" ry="2.5" transform="rotate(40 58 230)"/>
         </g>
       </g>
     </svg>
 
-    <!-- Side mid-left small sprig -->
-    <svg class="bg__sprig bg__sprig--l" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
-      <g fill="none" stroke="#789e6d" stroke-linecap="round">
-        <path d="M20 20 Q 40 100 80 190" stroke-width="1.4" opacity=".55"/>
-        <g fill="#95b883" opacity=".7">
-          <ellipse cx="34" cy="52" rx="14" ry="5" transform="rotate(-30 34 52)"/>
-          <ellipse cx="46" cy="86" rx="14" ry="5" transform="rotate(40 46 86)"/>
-          <ellipse cx="58" cy="120" rx="14" ry="5" transform="rotate(-32 58 120)"/>
-          <ellipse cx="70" cy="154" rx="14" ry="5" transform="rotate(38 70 154)"/>
+    <svg class="decor-berries" viewBox="0 0 140 240">
+      <g class="sway sway--slow">
+        <path d="M70 0 Q 75 60, 70 120 T 60 240" stroke="#8c6a3e" stroke-width="1.2" fill="none" opacity="0.7"/>
+        <g class="berry-pulse">
+          <circle cx="50" cy="60" r="10" fill="#b85454" opacity="0.85"/>
+          <circle cx="68" cy="48" r="11" fill="#a84848" opacity="0.9"/>
+          <circle cx="88" cy="62" r="9" fill="#b85454" opacity="0.82"/>
+        </g>
+        <g class="berry-pulse berry-pulse--b">
+          <circle cx="56" cy="160" r="10" fill="#b85454" opacity="0.85"/>
+          <circle cx="76" cy="150" r="12" fill="#a84848" opacity="0.9"/>
+          <circle cx="90" cy="170" r="9" fill="#b85454" opacity="0.82"/>
+          <circle cx="70" cy="180" r="8" fill="#c86060" opacity="0.8"/>
         </g>
       </g>
     </svg>
 
-    <!-- Side mid-right small sprig -->
-    <svg class="bg__sprig bg__sprig--r" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
-      <g fill="none" stroke="#789e6d" stroke-linecap="round">
-        <path d="M100 20 Q 80 100 40 190" stroke-width="1.4" opacity=".55"/>
-        <g fill="#95b883" opacity=".7">
-          <ellipse cx="86" cy="52" rx="14" ry="5" transform="rotate(30 86 52)"/>
-          <ellipse cx="74" cy="86" rx="14" ry="5" transform="rotate(-40 74 86)"/>
-          <ellipse cx="62" cy="120" rx="14" ry="5" transform="rotate(32 62 120)"/>
-          <ellipse cx="50" cy="154" rx="14" ry="5" transform="rotate(-38 50 154)"/>
-        </g>
-      </g>
-    </svg>
-
-    <!-- Bottom-left berry floral -->
-    <svg class="bg__berry bg__berry--bl" viewBox="0 0 240 220" xmlns="http://www.w3.org/2000/svg">
-      <g fill="none">
-        <path d="M10 210 C 50 140, 90 100, 180 30" stroke="#789e6d" stroke-width="1.6" stroke-linecap="round" opacity=".65"/>
-        <g fill="#8fae7a" opacity=".8">
-          <ellipse cx="44" cy="168" rx="16" ry="6" transform="rotate(-30 44 168)"/>
-          <ellipse cx="78" cy="130" rx="17" ry="6" transform="rotate(-42 78 130)"/>
-          <ellipse cx="112" cy="94" rx="18" ry="7" transform="rotate(-48 112 94)"/>
-          <ellipse cx="148" cy="62" rx="16" ry="6" transform="rotate(-54 148 62)"/>
-        </g>
-        <!-- small pink-red berry clusters -->
-        <g>
-          <circle cx="34" cy="188" r="5" fill="#c67a7a"/>
-          <circle cx="44" cy="186" r="4.5" fill="#b66666"/>
-          <circle cx="40" cy="196" r="4" fill="#c67a7a"/>
-          <circle cx="70" cy="150" r="5" fill="#b66666"/>
-          <circle cx="78" cy="146" r="4" fill="#c67a7a"/>
-          <circle cx="100" cy="108" r="4.5" fill="#c67a7a"/>
-          <circle cx="108" cy="102" r="4" fill="#b66666"/>
-          <circle cx="136" cy="74" r="4.5" fill="#c67a7a"/>
-          <circle cx="144" cy="70" r="4" fill="#b66666"/>
-          <circle cx="170" cy="42" r="4.5" fill="#c67a7a"/>
-          <circle cx="178" cy="36" r="4" fill="#b66666"/>
-        </g>
-      </g>
-    </svg>
-
-    <!-- Bottom-right berry floral (mirrored) -->
-    <svg class="bg__berry bg__berry--br" viewBox="0 0 240 220" xmlns="http://www.w3.org/2000/svg">
-      <g fill="none">
-        <path d="M230 210 C 190 140, 150 100, 60 30" stroke="#789e6d" stroke-width="1.6" stroke-linecap="round" opacity=".65"/>
-        <g fill="#8fae7a" opacity=".8">
-          <ellipse cx="196" cy="168" rx="16" ry="6" transform="rotate(30 196 168)"/>
-          <ellipse cx="162" cy="130" rx="17" ry="6" transform="rotate(42 162 130)"/>
-          <ellipse cx="128" cy="94" rx="18" ry="7" transform="rotate(48 128 94)"/>
-          <ellipse cx="92" cy="62" rx="16" ry="6" transform="rotate(54 92 62)"/>
-        </g>
-        <g>
-          <circle cx="206" cy="188" r="5" fill="#c67a7a"/>
-          <circle cx="196" cy="186" r="4.5" fill="#b66666"/>
-          <circle cx="200" cy="196" r="4" fill="#c67a7a"/>
-          <circle cx="170" cy="150" r="5" fill="#b66666"/>
-          <circle cx="162" cy="146" r="4" fill="#c67a7a"/>
-          <circle cx="140" cy="108" r="4.5" fill="#c67a7a"/>
-          <circle cx="132" cy="102" r="4" fill="#b66666"/>
-          <circle cx="104" cy="74" r="4.5" fill="#c67a7a"/>
-          <circle cx="96" cy="70" r="4" fill="#b66666"/>
-          <circle cx="70" cy="42" r="4.5" fill="#c67a7a"/>
-          <circle cx="62" cy="36" r="4" fill="#b66666"/>
-        </g>
-      </g>
-    </svg>
+    <!-- Falling leaves — soft, calming, infinite loop -->
+    <div class="leaves">
+      <span class="leaf"           style="--x:6%;  --d:22s; --delay:-2s;  --s:12px; --o:.55; --b:1.6px"><i></i></span>
+      <span class="leaf leaf--alt" style="--x:14%; --d:18s; --delay:-8s;  --s:20px; --o:.80; --b:.4px"><i></i></span>
+      <span class="leaf"           style="--x:24%; --d:24s; --delay:-14s; --s:14px; --o:.60; --b:1.4px"><i></i></span>
+      <span class="leaf leaf--alt" style="--x:34%; --d:16s; --delay:-4s;  --s:24px; --o:.90; --b:0"><i></i></span>
+      <span class="leaf"           style="--x:42%; --d:20s; --delay:-12s; --s:16px; --o:.70; --b:.8px"><i></i></span>
+      <span class="leaf leaf--alt" style="--x:50%; --d:25s; --delay:-6s;  --s:12px; --o:.50; --b:1.8px"><i></i></span>
+      <span class="leaf"           style="--x:58%; --d:15s; --delay:-10s; --s:22px; --o:.85; --b:.2px"><i></i></span>
+      <span class="leaf leaf--alt" style="--x:66%; --d:19s; --delay:-3s;  --s:18px; --o:.75; --b:.6px"><i></i></span>
+      <span class="leaf"           style="--x:74%; --d:23s; --delay:-16s; --s:14px; --o:.60; --b:1.4px"><i></i></span>
+      <span class="leaf leaf--alt" style="--x:82%; --d:17s; --delay:-1s;  --s:20px; --o:.80; --b:.4px"><i></i></span>
+      <span class="leaf"           style="--x:90%; --d:21s; --delay:-9s;  --s:13px; --o:.55; --b:1.6px"><i></i></span>
+      <span class="leaf leaf--alt" style="--x:8%;  --d:14s; --delay:-5s;  --s:26px; --o:.90; --b:0"><i></i></span>
+      <span class="leaf"           style="--x:30%; --d:22s; --delay:-18s; --s:11px; --o:.50; --b:1.8px"><i></i></span>
+      <span class="leaf leaf--alt" style="--x:60%; --d:16s; --delay:-11s; --s:22px; --o:.88; --b:.1px"><i></i></span>
+      <span class="leaf"           style="--x:88%; --d:18s; --delay:-7s;  --s:17px; --o:.72; --b:.7px"><i></i></span>
+    </div>
   </div>
 
+  <!-- Music toggle (top-right) -->
+  <button class="music-btn" id="musicBtn" aria-label="Toggle music">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="18" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+  </button>
+
+  <!-- Page indicator dots -->
+  <nav class="pager-dots" id="pagerDots" aria-label="Page indicator"></nav>
+
   <!-- ═══════════════════════════════════════════════════════
-       THE STACK
-       All cards live inside this centered column.
-       Mobile-first (~390px) — on desktop the stack simply
-       stays centered at its mobile width.
+       SWIPE-PAGED STACK
+       7 full-screen pages, swipe up/down to advance.
        ═══════════════════════════════════════════════════════ -->
-  <main class="stack">
+  <div class="pager" id="pager">
 
-    <!-- ───────── 1 · COVER CARD ───────── -->
-    <section class="card card--cover reveal">
-      <div class="card__inner">
-        <div class="card__tag">— EST. 2026 —</div>
+    <!-- ───────── PAGE 1 · COVER ───────── -->
+    <section class="page page--cover is-active" data-page="0">
 
-        <p class="eyebrow">Invitation to</p>
-        <h1 class="cover__title">Wedding</h1>
+<div class="cover-text">
+        <h1 class="cover-title anim" style="--i:1">Wedding Invitation</h1>
+        <p class="cover-names anim" style="--i:2">Adrian Yeow <span class="amp">&amp;</span> Charlotte Har</p>
+      </div>
+      <p class="cover-thanks anim" style="--i:4">THANK YOU FOR CELEBRATING WITH US</p>
 
-        <div class="divider"><span></span><i></i><span></span></div>
-
-        <p class="cover__couple">
-          Mr. <span class="cover__name">Adrian</span>
-          <span class="cover__amp">&amp;</span>
-          Mrs. <span class="cover__name">Charlotte</span>
-        </p>
-
-        <p class="cover__subtitle"><em>“Two hearts, one story, written in forever.”</em></p>
-
-        <div class="card__tag card__tag--bottom">10 · 10 · 2026</div>
+      <div class="swipe-hint anim" style="--i:6">
+        <span>Swipe up</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4v16M6 14l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
     </section>
 
-    <!-- ───────── 2 · SAVE THE DATE CARD ───────── -->
-    <section class="card card--save reveal">
-      <div class="card__inner">
-        <p class="eyebrow">Wedding Invitation</p>
-        <h2 class="save__title">Please Save<br/>the Date</h2>
+    <!-- ───────── PAGE 2 · SAVE THE DATE ───────── -->
+    <section class="page page--save" data-page="1">
+      <div class="frame">
+        <div class="frame__side frame__side--left">— BEAUTIFUL LOVE —</div>
+        <div class="frame__side frame__side--right">— SAVE THE DATE —</div>
 
-        <figure class="save__photo">
-          <div class="save__photo-img" role="img" aria-label="Photograph of the couple"></div>
-        </figure>
+        <div class="frame__content">
+          <p class="h-eyebrow anim anim-down" style="--i:1">WEDDING INVITATION</p>
+          <h2 class="h-title anim anim-zoom" style="--i:2">PLEASE SAVE THE DATE</h2>
 
-        <div class="divider divider--short"><span></span><i></i><span></span></div>
+          <figure class="save-photo anim anim-zoom" style="--i:3">
+            <img src="assets/couple.jpg" alt="Adrian and Charlotte" loading="lazy" />
+          </figure>
 
-        <p class="save__body">
-          Together with their families,<br/>
-          <strong>Adrian</strong> and <strong>Charlotte</strong><br/>
-          request the honour of your presence<br/>
-          at the celebration of their marriage.
-        </p>
+          <p class="save-names anim" style="--i:4">Adrian Yeow<span class="amp-sm">&amp;</span>Charlotte Har</p>
 
-        <p class="save__meta">
-          <span>Saturday, the Tenth of October</span><br/>
-          <span>Two Thousand and Twenty-Six</span><br/>
-          <span>at Three in the Afternoon</span>
-        </p>
-
-        <p class="save__venue">The Grand Palace Hall</p>
-      </div>
-    </section>
-
-    <!-- ───────── 3 · GROOM CARD ───────── -->
-    <section class="card card--groom reveal">
-      <div class="card__inner">
-        <figure class="oval-photo">
-          <div class="oval-photo__img oval-photo__img--groom" role="img" aria-label="Portrait of the groom"></div>
-        </figure>
-
-        <h2 class="script-title">The Groom</h2>
-        <p class="eyebrow">Love you forever</p>
-
-        <div class="divider divider--short"><span></span><i></i><span></span></div>
-
-        <p class="person__name">Adrian</p>
-        <p class="person__detail">
-          The eldest son of<br/>
-          <em>Mr. &amp; Mrs. Yeow</em>
-        </p>
-
-        <p class="person__quote">
-          “In her quiet laughter I found the song<br/>
-          I had been humming all my life.”
-        </p>
-      </div>
-    </section>
-
-    <!-- ───────── 4 · COUPLE PHOTO CARD ───────── -->
-    <section class="card card--couple reveal">
-      <div class="card__inner card__inner--tight">
-        <figure class="tall-photo">
-          <div class="tall-photo__img" role="img" aria-label="Photograph of the couple together"></div>
-          <figcaption class="tall-photo__cap">
-            <span class="tall-photo__script">Sweet Love</span>
-            <span class="tall-photo__serif">— Wedding Invitation —</span>
-          </figcaption>
-        </figure>
-
-        <p class="couple__caption">
-          <em>Two souls, one heartbeat — forever intertwined.</em>
-        </p>
-      </div>
-    </section>
-
-    <!-- ───────── 6 · COUNTDOWN + RSVP CARD ───────── -->
-    <section class="card card--rsvp reveal">
-      <div class="card__inner">
-        <p class="eyebrow">Wedding Invitation</p>
-        <h2 class="save__title">Countdown</h2>
-
-        <div class="countdown" id="countdownGrid" aria-live="polite">
-          <div class="countdown__unit">
-            <span class="countdown__num" id="cdDays">00</span>
-            <span class="countdown__lbl">Days</span>
+          <div class="save-chinese anim anim-left" style="--i:5">
+            <p>在这最美丽的季节里</p>
+            <p>我们相遇，相爱</p>
+            <p>我们的幸福需要你的见证</p>
           </div>
-          <div class="countdown__unit">
-            <span class="countdown__num" id="cdHours">00</span>
-            <span class="countdown__lbl">Hours</span>
+
+          <div class="save-date anim anim-right" style="--i:6">
+            <p>2026年10月10日 星期六</p>
+            <p>农历九月初一 18:30</p>
           </div>
-          <div class="countdown__unit">
-            <span class="countdown__num" id="cdMinutes">00</span>
-            <span class="countdown__lbl">Minutes</span>
-          </div>
-          <div class="countdown__unit">
-            <span class="countdown__num" id="cdSeconds">00</span>
-            <span class="countdown__lbl">Seconds</span>
-          </div>
+
+          <p class="save-venue anim anim-zoom" style="--i:7">Pullman KLCC</p>
+
+          <p class="h-footer anim" style="--i:8">WELCOME TO OUR WEDDING</p>
         </div>
-
-        <div class="divider divider--short"><span></span><i></i><span></span></div>
-
-        <form class="rsvp" id="rsvpForm" novalidate>
-          <div class="rsvp__field">
-            <label for="rsvpName">Name</label>
-            <input id="rsvpName" name="name" type="text" autocomplete="name" required />
-          </div>
-
-          <div class="rsvp__field">
-            <label for="rsvpSide">Groom / Bride</label>
-            <select id="rsvpSide" name="side" required>
-              <option value="" disabled selected>Please select</option>
-              <option value="groom">Groom's Guest</option>
-              <option value="bride">Bride's Guest</option>
-              <option value="both">Both</option>
-            </select>
-          </div>
-
-          <div class="rsvp__field">
-            <label for="rsvpMain">Main Course</label>
-            <select id="rsvpMain" name="main">
-              <option value="" disabled selected>Please select</option>
-              <option value="fish">Fish</option>
-              <option value="beef">Beef</option>
-              <option value="chicken">Chicken</option>
-            </select>
-          </div>
-
-          <div class="rsvp__field">
-            <label for="rsvpDiet">Dietary Restrictions</label>
-            <input id="rsvpDiet" name="diet" type="text" placeholder="None, vegetarian, allergies…" />
-          </div>
-
-          <button type="submit" class="btn-dark">Submit</button>
-          <p class="rsvp__ok" id="rsvpSuccess" hidden>✓ Thank you — your reply has been received.</p>
-        </form>
-
-        <p class="footer-line">— Welcome to our Wedding —</p>
       </div>
     </section>
 
-    <!-- ───────── 7 · VENUE & MAP CARD ───────── -->
-    <section class="card card--venue reveal">
-      <div class="card__inner">
-        <p class="eyebrow">Celebration Venue</p>
-        <h2 class="save__title">Location</h2>
+    <!-- ───────── PAGE 3 · THE GROOM ───────── -->
+    <section class="page page--groom" data-page="2">
+      <div class="frame">
+        <div class="frame__side frame__side--left">— BEAUTIFUL LOVE —</div>
+        <div class="frame__side frame__side--right">— SAVE THE DATE —</div>
 
-        <div class="divider divider--short"><span></span><i></i><span></span></div>
+        <div class="frame__content">
+          <figure class="circle-photo anim anim-rotate" style="--i:1">
+            <img src="assets/groom.jpg" alt="The Groom" loading="lazy" />
+          </figure>
 
-        <p class="venue__name">Sekamat Grand Palace Event Hall</p>
-        <p class="venue__address">
-          Jalan Sekamat, Cheras<br/>
-          43200 Selangor, Malaysia
-        </p>
+          <h2 class="script-title anim anim-zoom" style="--i:2">The Groom</h2>
+          <p class="h-eyebrow anim" style="--i:3">LOVE YOU FOREVER</p>
+
+          <div class="brush-block anim" style="--i:4">
+            <p class="person-name">&lt; 新郎 Adrian Yeow</p>
+            <div class="person-lines">
+              <p>最美的风景是有你的地方</p>
+              <p>一起踏上我们的前方</p>
+            </div>
+            <p class="person-quote"><em>I love you not because who you are, but because<br/>of who I am when I am with you</em></p>
+          </div>
+
+          <p class="h-footer anim" style="--i:6">THANK YOU FOR CELEBRATING WITH US</p>
+        </div>
       </div>
+    </section>
 
-      <!-- Embedded Google Map -->
-      <div class="venue__map-wrap">
-        <iframe
-          class="venue__map"
-          src="https://maps.google.com/maps?q=Sekamat+Grand+Palace+Event+Hall,+Cheras,+Selangor&output=embed&hl=en&z=16"
-          allowfullscreen
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          title="Wedding venue location"
-        ></iframe>
+    <!-- ───────── PAGE 4 · THE BRIDE ───────── -->
+    <section class="page page--bride" data-page="3">
+      <div class="frame">
+        <div class="frame__side frame__side--left">— BEAUTIFUL LOVE —</div>
+        <div class="frame__side frame__side--right">— SAVE THE DATE —</div>
+
+        <div class="frame__content">
+          <figure class="circle-photo anim anim-rotate" style="--i:1">
+            <img src="assets/couple-1.jpg" alt="The Bride" loading="lazy" />
+          </figure>
+
+          <h2 class="script-title anim anim-zoom" style="--i:2">The Bride</h2>
+          <p class="h-eyebrow anim" style="--i:3">LOVE YOU FOREVER</p>
+
+          <div class="brush-block anim" style="--i:4">
+            <p class="person-name">&lt; 新娘 Charlotte Har</p>
+            <div class="person-lines">
+              <p>这一天我将穿上婚纱走向他</p>
+              <p>迎来我们人生的新起点</p>
+            </div>
+            <p class="person-quote"><em>I love you not because who you are, but because<br/>of who I am when I am with you</em></p>
+          </div>
+
+          <p class="h-footer anim" style="--i:6">THANK YOU FOR CELEBRATING WITH US</p>
+        </div>
       </div>
+    </section>
 
-      <div class="card__inner card__inner--tight">
-        <a class="venue__directions"
-           href="https://www.google.com/maps/search/Sekamat+Grand+Palace+Event+Hall,+Cheras,+Selangor"
-           target="_blank"
-           rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M21 3L3 10.5l7.5 3L14 21l7-18z"/>
+    <!-- ───────── PAGE 5 · SCHEDULE ───────── -->
+    <section class="page page--schedule" data-page="4">
+      <div class="frame frame--no-pad">
+        <div class="frame__side frame__side--left">— BEAUTIFUL LOVE —</div>
+        <div class="frame__side frame__side--right">— SAVE THE DATE —</div>
+
+        <div class="frame__content frame__content--schedule">
+          <figure class="schedule-photo anim anim-zoom" style="--i:1">
+            <img src="assets/couple-formal.jpg" alt="Adrian and Charlotte" loading="lazy" />
+            <div class="photo-fade"></div>
+          </figure>
+
+          <div class="schedule-body">
+            <h2 class="script-title script-title--ontop anim anim-flip" style="--i:2">schedule</h2>
+            <p class="schedule-sub anim" style="--i:3">love you forever</p>
+            <p class="h-eyebrow anim" style="--i:4">&lt; 婚礼安排 &gt;</p>
+
+            <ul class="schedule-list">
+              <li class="anim anim-left" style="--i:5"><span class="t">18:00</span> - 迎接宾客</li>
+              <li class="anim anim-right" style="--i:6"><span class="t">18:30</span> - 现场签到</li>
+              <li class="anim anim-left" style="--i:7"><span class="t">19:00</span> - 举行婚礼</li>
+              <li class="anim anim-right" style="--i:8"><span class="t">19:30</span> - 晚宴享用</li>
+            </ul>
+
+            <p class="person-quote anim" style="--i:9"><em>I love you not because who you are, but because<br/>of who I am when I am with you</em></p>
+          </div>
+
+          <!-- Bottom grass decoration -->
+          <svg class="schedule-grass" viewBox="0 0 400 120" aria-hidden="true">
+            <g class="sway sway--slow" fill="#6a8a5c" opacity="0.75">
+              <path d="M20 120 C 15 80, 30 50, 28 10" stroke="#6a8a5c" stroke-width="1.4" fill="none"/>
+              <path d="M40 120 C 42 70, 55 40, 50 0" stroke="#6a8a5c" stroke-width="1.4" fill="none"/>
+              <path d="M60 120 C 58 80, 72 50, 68 20" stroke="#6a8a5c" stroke-width="1.4" fill="none"/>
+              <path d="M80 120 C 82 70, 95 40, 90 10" stroke="#6a8a5c" stroke-width="1.4" fill="none"/>
+              <path d="M320 120 C 318 80, 330 50, 328 10" stroke="#6a8a5c" stroke-width="1.4" fill="none"/>
+              <path d="M340 120 C 342 70, 355 40, 350 0" stroke="#6a8a5c" stroke-width="1.4" fill="none"/>
+              <path d="M360 120 C 358 80, 372 50, 368 20" stroke="#6a8a5c" stroke-width="1.4" fill="none"/>
+              <path d="M380 120 C 382 70, 395 40, 390 10" stroke="#6a8a5c" stroke-width="1.4" fill="none"/>
+              <ellipse cx="24" cy="40" rx="26" ry="2.5" transform="rotate(80 24 40)"/>
+              <ellipse cx="48" cy="30" rx="28" ry="2.5" transform="rotate(82 48 30)"/>
+              <ellipse cx="66" cy="50" rx="26" ry="2.5" transform="rotate(80 66 50)"/>
+              <ellipse cx="88" cy="40" rx="28" ry="2.5" transform="rotate(82 88 40)"/>
+              <ellipse cx="324" cy="40" rx="26" ry="2.5" transform="rotate(-80 324 40)"/>
+              <ellipse cx="348" cy="30" rx="28" ry="2.5" transform="rotate(-82 348 30)"/>
+              <ellipse cx="366" cy="50" rx="26" ry="2.5" transform="rotate(-80 366 50)"/>
+              <ellipse cx="388" cy="40" rx="28" ry="2.5" transform="rotate(-82 388 40)"/>
+            </g>
           </svg>
-          Get Directions
-        </a>
+        </div>
       </div>
     </section>
 
-    <div class="stack__end" aria-hidden="true"></div>
-  </main>
+    <!-- ───────── PAGE 6 · ADDRESS ───────── -->
+    <section class="page page--address" data-page="5">
+      <div class="frame">
+        <div class="frame__side frame__side--left">— BEAUTIFUL LOVE —</div>
+        <div class="frame__side frame__side--right">— SAVE THE DATE —</div>
 
-  <!-- ── Hidden YouTube player ── -->
+        <div class="frame__content">
+          <h2 class="script-title anim anim-zoom" style="--i:1">Address</h2>
+          <p class="h-eyebrow anim" style="--i:2">&lt; 婚宴地址 &gt;</p>
+
+          <div class="map-wrap anim anim-zoom" style="--i:3">
+            <iframe
+              src="https://maps.google.com/maps?q=Pullman+Kuala+Lumpur+City+Centre&output=embed&hl=en&z=16"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Pullman KLCC"></iframe>
+            <a class="map-direction" href="https://www.google.com/maps/search/Pullman+Kuala+Lumpur+City+Centre" target="_blank" rel="noopener" aria-label="Get directions">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3L3 10.5l7.5 3L14 21l7-18z" fill="currentColor"/></svg>
+            </a>
+          </div>
+
+          <p class="venue-name anim" style="--i:4">Pullman KLCC</p>
+          <p class="h-eyebrow h-eyebrow--small anim" style="--i:5">WEDDING INVITATION</p>
+
+          <div class="phone-row anim anim-zoom" style="--i:6">
+            <a class="phone-btn" href="tel:+60123456789">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1v3.5c0 .6-.4 1-1 1C9.6 21 3 14.4 3 6c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.4.6 3.5.1.4 0 .7-.2 1l-2.3 2.3z" fill="currentColor"/></svg>
+              Groom
+            </a>
+            <a class="phone-btn" href="tel:+60123456789">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1v3.5c0 .6-.4 1-1 1C9.6 21 3 14.4 3 6c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.4.6 3.5.1.4 0 .7-.2 1l-2.3 2.3z" fill="currentColor"/></svg>
+              Bride
+            </a>
+          </div>
+
+          <p class="person-quote anim" style="--i:7"><em>I love you not because who you are, but because<br/>of who I am when I am with you</em></p>
+
+          <p class="h-footer anim" style="--i:8">THANK YOU FOR CELEBRATING WITH US</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────── PAGE 7 · COUNTDOWN + RSVP ───────── -->
+    <section class="page page--count" data-page="6">
+      <div class="frame">
+        <div class="frame__side frame__side--left">— BEAUTIFUL LOVE —</div>
+        <div class="frame__side frame__side--right">— SAVE THE DATE —</div>
+
+        <div class="frame__content">
+          <p class="h-eyebrow anim" style="--i:1">WEDDING INVITATION</p>
+          <h2 class="h-title anim anim-zoom" style="--i:2">COUNTDOWN</h2>
+          <p class="h-eyebrow anim" style="--i:3">&lt; 婚礼倒计时 &gt;</p>
+
+          <div class="cd-grid anim anim-zoom" style="--i:4">
+            <div class="cd-box"><span id="cdDays">00</span><b>天</b></div>
+            <div class="cd-box"><span id="cdHours">00</span><b>时</b></div>
+            <div class="cd-box"><span id="cdMinutes">00</span><b>分</b></div>
+            <div class="cd-box"><span id="cdSeconds">00</span><b>秒</b></div>
+          </div>
+
+          <form class="rsvp anim anim-left" id="rsvpForm" style="--i:5" novalidate>
+            <label class="rsvp-field">
+              <span class="req">*</span>
+              <input name="name" type="text" placeholder="Name" required />
+            </label>
+            <label class="rsvp-field">
+              <span class="req">*</span>
+              <select name="side" required>
+                <option value="" disabled selected>Groom / Bride</option>
+                <option value="groom">Groom</option>
+                <option value="bride">Bride</option>
+              </select>
+            </label>
+            <label class="rsvp-field">
+              <span class="req">*</span>
+              <select name="main" required>
+                <option value="" disabled selected>Beef / Fish / Chicken</option>
+                <option value="beef">Beef</option>
+                <option value="fish">Fish</option>
+                <option value="chicken">Chicken</option>
+              </select>
+            </label>
+            <button type="submit" class="submit-btn">Submit</button>
+            <p class="rsvp-ok" id="rsvpSuccess" hidden>✓ Thank you — your reply has been received.</p>
+          </form>
+
+          <p class="h-footer anim" style="--i:6">WELCOME TO OUR WEDDING</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Hidden YouTube player -->
   <div id="ytPlayer" aria-hidden="true"></div>
 
-  <!-- YouTube IFrame API -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script src="script.js"></script>
 </body>

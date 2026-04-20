@@ -1,11 +1,11 @@
 /* =============================================================
-   Ethan & Sophia — Mobile botanical e-card
+   Adrian & Charlotte — Hunbei-style swipe wedding invitation
    Modules:
-     1 · Scroll reveal (fade + gentle rise)
-     2 · Gentle parallax on botanical background
-     3 · Countdown timer to 10 October 2026, 15:00 local
-     4 · RSVP form handler
-     5 · YouTube background music player
+     1 · Swipe / wheel page navigation (7 full-screen pages)
+     2 · Dot indicators
+     3 · Countdown (10 Oct 2026, 18:30 local)
+     4 · RSVP form
+     5 · YouTube background music (two-flag pattern)
    ============================================================= */
 
 (() => {
@@ -14,120 +14,140 @@
   const prefersReducedMotion =
     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── 1 · Scroll reveal ──────────────────────────────────── */
-  // Each .reveal element fades in + rises when it scrolls into view.
-  const reveals = document.querySelectorAll('.reveal');
+  /* ── 1 · Swipe / wheel page navigation ──────────────────── */
+  const pager  = document.getElementById('pager');
+  const pages  = Array.from(document.querySelectorAll('.page'));
+  const dotsEl = document.getElementById('pagerDots');
 
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-visible');
-          io.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.16, rootMargin: '0px 0px -8% 0px' }
-    );
-    reveals.forEach((el) => io.observe(el));
-  } else {
-    // No observer support — show everything immediately.
-    reveals.forEach((el) => el.classList.add('is-visible'));
+  let current   = 0;
+  let animating = false;
+
+  function setActive(idx) {
+    pages.forEach((p, i) => p.classList.toggle('is-active', i === idx));
+    [...dotsEl.children].forEach((d, i) => d.classList.toggle('is-on', i === idx));
   }
 
-  /* ── 2 · Soft parallax for the botanical background ─────── */
-  // The background layer drifts up slowly as you scroll, giving the
-  // cards the feeling of floating over a painted page.
-  const bg = document.getElementById('bg');
-  if (bg && !prefersReducedMotion) {
-    let targetY = 0;
-    let currentY = 0;
-    let rafId = null;
-
-    function onScroll() {
-      targetY = window.scrollY * -0.12; // -12% parallax coefficient
-      if (!rafId) rafId = requestAnimationFrame(render);
-    }
-    function render() {
-      // Ease toward the target for smoothness
-      currentY += (targetY - currentY) * 0.12;
-      if (Math.abs(targetY - currentY) < 0.1) currentY = targetY;
-      bg.style.transform = `translate3d(0, ${currentY.toFixed(2)}px, 0)`;
-      rafId = Math.abs(targetY - currentY) > 0.1 ? requestAnimationFrame(render) : null;
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+  function goTo(idx) {
+    idx = Math.max(0, Math.min(pages.length - 1, idx));
+    if (idx === current || animating) return;
+    animating = true;
+    current   = idx;
+    pager.style.transform = `translateY(-${idx * 100}dvh)`;
+    setActive(idx);
+    // Unlock after transition completes (CSS is 900ms)
+    setTimeout(() => { animating = false; }, 920);
   }
 
-  /* ── 3 · Countdown timer ────────────────────────────────── */
-  // Target: 10 October 2026, 3:00 pm local time.
-  const TARGET = new Date(2026, 9, 10, 15, 0, 0); // month is 0-indexed
+  // Build dots
+  pages.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.setAttribute('aria-label', `Go to page ${i + 1}`);
+    if (i === 0) dot.classList.add('is-on');
+    dot.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(dot);
+  });
+
+  // Touch swipe
+  let touchStartY = 0;
+  let touchStartT = 0;
+  let touchStartTarget = null;
+
+  window.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+    touchStartT = Date.now();
+    touchStartTarget = e.target;
+  }, { passive: true });
+
+  window.addEventListener('touchend', (e) => {
+    // If the gesture started inside a scrollable frame content that
+    // still has room to scroll, let the native scroll handle it.
+    const dy  = touchStartY - e.changedTouches[0].clientY;
+    const dt  = Date.now() - touchStartT;
+    const abs = Math.abs(dy);
+    if (abs < 40 || dt > 800) return;
+
+    const scrollable = touchStartTarget && touchStartTarget.closest('.frame__content');
+    if (scrollable) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollable;
+      const atTop    = scrollTop <= 1;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+      // Only change page if user is swiping past the edge of the content
+      if (dy > 0 && !atBottom) return; // wants next, but can still scroll down
+      if (dy < 0 && !atTop)    return; // wants prev, but can still scroll up
+    }
+
+    if (dy > 0) goTo(current + 1);
+    else        goTo(current - 1);
+  }, { passive: true });
+
+  // Wheel (desktop) — throttled
+  let wheelLock = 0;
+  window.addEventListener('wheel', (e) => {
+    const now = Date.now();
+    if (now - wheelLock < 950 || animating) return;
+    if (Math.abs(e.deltaY) < 20) return;
+    wheelLock = now;
+    if (e.deltaY > 0) goTo(current + 1);
+    else              goTo(current - 1);
+  }, { passive: true });
+
+  // Keyboard
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault(); goTo(current + 1);
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault(); goTo(current - 1);
+    }
+  });
+
+  /* ── 2 · Countdown ──────────────────────────────────────── */
+  const TARGET = new Date(2026, 9, 10, 18, 30, 0); // 10 Oct 2026, 18:30
   const pad = (n) => String(Math.max(0, n)).padStart(2, '0');
-
   const els = {
     d: document.getElementById('cdDays'),
     h: document.getElementById('cdHours'),
     m: document.getElementById('cdMinutes'),
     s: document.getElementById('cdSeconds'),
   };
-
-  function tickCountdown() {
-    const now = new Date();
-    let diff = Math.max(0, Math.floor((TARGET - now) / 1000));
-    const days  = Math.floor(diff / 86400); diff -= days * 86400;
-    const hours = Math.floor(diff / 3600);  diff -= hours * 3600;
-    const mins  = Math.floor(diff / 60);    diff -= mins * 60;
-    const secs  = diff;
-    if (els.d) els.d.textContent = pad(days);
-    if (els.h) els.h.textContent = pad(hours);
-    if (els.m) els.m.textContent = pad(mins);
-    if (els.s) els.s.textContent = pad(secs);
+  function tick() {
+    let diff = Math.max(0, Math.floor((TARGET - Date.now()) / 1000));
+    const D = Math.floor(diff / 86400); diff -= D * 86400;
+    const H = Math.floor(diff / 3600);  diff -= H * 3600;
+    const M = Math.floor(diff / 60);    diff -= M * 60;
+    if (els.d) els.d.textContent = pad(D);
+    if (els.h) els.h.textContent = pad(H);
+    if (els.m) els.m.textContent = pad(M);
+    if (els.s) els.s.textContent = pad(diff);
   }
+  if (els.d) { tick(); setInterval(tick, 1000); }
 
-  if (els.d || els.h || els.m || els.s) {
-    tickCountdown();
-    setInterval(tickCountdown, 1000);
-  }
-
-  /* ── 4 · RSVP form ──────────────────────────────────────── */
+  /* ── 3 · RSVP ───────────────────────────────────────────── */
   const form = document.getElementById('rsvpForm');
-
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-
       const name = form.name.value.trim();
       const side = form.side.value;
-
-      let firstMissing = null;
-      if (!name) firstMissing = form.name;
-      else if (!side) firstMissing = form.side;
-
-      if (firstMissing) {
-        if (typeof firstMissing.focus === 'function') firstMissing.focus();
-        if (typeof firstMissing.scrollIntoView === 'function') {
-          firstMissing.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
-        }
+      const main = form.main.value;
+      if (!name || !side || !main) {
+        const miss = !name ? form.name : !side ? form.side : form.main;
+        if (miss && miss.focus) miss.focus();
         return;
       }
-
-      // In production, POST the data to your backend or Google Form here.
-      form.querySelectorAll('input, select, button').forEach((el) => (el.disabled = true));
+      form.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
       const ok = document.getElementById('rsvpSuccess');
-      if (ok) {
-        ok.hidden = false;
-        ok.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
-      }
+      if (ok) ok.hidden = false;
     });
   }
 
+  // Expose for the music module below
+  window.__goTo = goTo;
 })();
 
-/* ── 5 · YouTube background music player ────────────────────
-   Starts muted (browser autoplay requirement) and unmutes on
-   the first user interaction. Two-flag approach handles both
-   orderings: player-ready-first OR user-interacts-first.
-   ─────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════
+   4 · YouTube background music (two-flag pattern)
+   ═══════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
@@ -135,23 +155,30 @@
   let   player    = null;
   let   playerReady = false;
   let   userActed   = false;
+  let   isPlaying   = true;
+
+  const btn = document.getElementById('musicBtn');
+  function setPlayingClass(on) {
+    if (btn) btn.classList.toggle('is-playing', on);
+  }
 
   function tryUnmute() {
     if (player && playerReady) {
-      player.unMute();
-      player.setVolume(70);
+      try {
+        player.unMute();
+        player.setVolume(70);
+      } catch (_) {}
     }
   }
 
-  // YouTube IFrame API callback
   window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player('ytPlayer', {
       videoId: VIDEO_ID,
       playerVars: {
         autoplay      : 1,
-        mute          : 1,        // start muted — required for autoplay
+        mute          : 1,
         loop          : 1,
-        playlist      : VIDEO_ID, // required for loop to work
+        playlist      : VIDEO_ID,
         controls      : 0,
         disablekb     : 1,
         iv_load_policy: 3,
@@ -163,29 +190,36 @@
         onReady: function (e) {
           playerReady = true;
           e.target.playVideo();
-          // Try to unmute immediately — works on browsers that allow
-          // autoplay with sound (returning visitors / high engagement).
-          // Falls back to first-interaction unmute if blocked.
           tryUnmute();
+          setPlayingClass(true);
         },
         onStateChange: function (e) {
           if (e.data === YT.PlayerState.ENDED) e.target.playVideo();
+          if (e.data === YT.PlayerState.PLAYING) { isPlaying = true; setPlayingClass(true); }
+          if (e.data === YT.PlayerState.PAUSED)  { isPlaying = false; setPlayingClass(false); }
         },
       },
     });
   };
 
-  // Unmute on very first interaction as fallback for strict browsers
   function onFirstInteraction() {
     if (userActed) return;
     userActed = true;
     tryUnmute();
-    ['touchstart', 'mousedown', 'keydown', 'scroll'].forEach(function (evt) {
+    ['touchstart', 'mousedown', 'keydown'].forEach(evt => {
       document.removeEventListener(evt, onFirstInteraction);
     });
   }
-
-  ['touchstart', 'mousedown', 'keydown', 'scroll'].forEach(function (evt) {
+  ['touchstart', 'mousedown', 'keydown'].forEach(evt => {
     document.addEventListener(evt, onFirstInteraction, { passive: true });
   });
+
+  // Music toggle button
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!playerReady) return;
+      if (isPlaying) { player.pauseVideo(); } else { player.playVideo(); }
+    });
+  }
 }());
