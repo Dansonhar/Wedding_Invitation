@@ -709,9 +709,10 @@ a { color: inherit; text-decoration: none; }
 }
 .schedule-photo {
   position: relative;
-  margin: clamp(10px, 1.8vh, 18px) clamp(12px, 4%, 22px) 0;
-  aspect-ratio: 4/5;
-  max-height: 44%;
+  margin: clamp(8px, 1.4vh, 14px) 0 0;
+  width: 100%;
+  aspect-ratio: 3/4;
+  max-height: 46%;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -719,6 +720,7 @@ a { color: inherit; text-decoration: none; }
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 .photo-fade {
   position: absolute;
@@ -727,9 +729,9 @@ a { color: inherit; text-decoration: none; }
   background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,.2) 40%, #ffffff 95%);
 }
 .schedule-body {
-  padding: 0 28px;
+  padding: 0 clamp(18px, 5vw, 28px);
   text-align: center;
-  margin-top: -18px;
+  margin-top: -26px;
   position: relative;
   z-index: 2;
 }
