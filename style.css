@@ -197,7 +197,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 22px 16px;
+  padding: clamp(12px, 3vh, 32px) clamp(10px, 4vw, 24px);
   isolation: isolate;
 }
 
@@ -491,10 +491,11 @@ a { color: inherit; text-decoration: none; }
 .frame {
   position: relative;
   width: 100%;
-  max-width: 360px;
+  max-width: min(94vw, 420px);
   height: 100%;
-  max-height: 680px;
-  padding: 22px 14px 18px;
+  max-height: min(96dvh, 780px);
+  padding: clamp(18px, 2.5vh, 26px) clamp(10px, 2.8vw, 18px)
+           clamp(14px, 2vh, 22px);
   display: flex;
   flex-direction: column;
   background: #ffffff;
@@ -536,12 +537,13 @@ a { color: inherit; text-decoration: none; }
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding: 10px 26px;
+  padding: clamp(6px, 1.4vh, 14px) clamp(16px, 5vw, 30px);
   display: flex;
   flex-direction: column;
   text-align: center;
   scrollbar-width: none;
   touch-action: pan-y;
+  min-height: 0;
 }
 .frame__content::-webkit-scrollbar { display: none; }
 
@@ -606,12 +608,15 @@ a { color: inherit; text-decoration: none; }
    PAGE 2 — Save the date
    ═══════════════════════════════════════════════════════ */
 .save-photo {
-  margin: 10px auto 14px;
-  width: 78%;
+  margin: clamp(6px, 1.2vh, 14px) auto clamp(8px, 1.6vh, 14px);
+  width: 82%;
+  max-width: 300px;
   aspect-ratio: 3/4;
+  max-height: 40vh;
   overflow: hidden;
   border-radius: 2px;
   box-shadow: 0 4px 18px rgba(90,70,50,.12);
+  flex-shrink: 0;
 }
 .save-photo img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -651,15 +656,16 @@ a { color: inherit; text-decoration: none; }
    PAGE 3 & 4 — Groom / Bride
    ═══════════════════════════════════════════════════════ */
 .circle-photo {
-  width: 68%;
+  width: min(62%, 36vh);
   max-width: 260px;
   aspect-ratio: 1/1;
-  margin: 14px auto 0;
+  margin: clamp(8px, 1.5vh, 16px) auto 0;
   border-radius: 50%;
   overflow: hidden;
   border: 4px solid #e0d4b8;
   box-shadow: 0 6px 20px rgba(90,70,50,.15);
   position: relative;
+  flex-shrink: 0;
 }
 .circle-photo img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -703,10 +709,11 @@ a { color: inherit; text-decoration: none; }
 }
 .schedule-photo {
   position: relative;
-  margin: 14px 18px 0;
+  margin: clamp(10px, 1.8vh, 18px) clamp(12px, 4%, 22px) 0;
   aspect-ratio: 4/5;
-  max-height: 50%;
+  max-height: 44%;
   overflow: hidden;
+  flex-shrink: 0;
 }
 .schedule-photo img {
   width: 100%;
@@ -766,12 +773,13 @@ a { color: inherit; text-decoration: none; }
   position: relative;
   width: 100%;
   aspect-ratio: 1/1;
-  max-height: 300px;
-  margin: 12px auto 10px;
+  max-height: min(40vh, 320px);
+  margin: clamp(8px, 1.5vh, 14px) auto clamp(6px, 1vh, 12px);
   border-radius: 2px;
   overflow: hidden;
   background: #000;
   border: 1px solid #eee;
+  flex-shrink: 0;
 }
 .map-wrap iframe {
   width: 100%;
@@ -831,28 +839,28 @@ a { color: inherit; text-decoration: none; }
 .cd-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin: 14px 0 20px;
+  gap: clamp(6px, 1.8vw, 10px);
+  margin: clamp(10px, 2vh, 18px) 0 clamp(14px, 2.5vh, 22px);
 }
 .cd-box {
   background: #1a1a1a;
   color: #fff;
   border-radius: 6px;
-  padding: 12px 0 10px;
+  padding: clamp(9px, 1.6vh, 14px) 0 clamp(7px, 1.2vh, 12px);
   text-align: center;
   line-height: 1;
 }
 .cd-box span {
   display: block;
   font-family: var(--f-serif);
-  font-size: 28px;
+  font-size: clamp(22px, 6vw, 30px);
   font-weight: 500;
   letter-spacing: 1px;
 }
 .cd-box b {
   display: block;
   font-family: 'Songti SC', serif;
-  font-size: 12px;
+  font-size: clamp(10px, 2.8vw, 13px);
   font-weight: 400;
   margin-top: 6px;
   opacity: .85;
@@ -930,13 +938,45 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ═══════════════════════════════════════════════════════
-   Small screens / safety
+   Responsive breakpoints
    ═══════════════════════════════════════════════════════ */
+
+/* Very small phones (iPhone SE, old Androids) */
 @media (max-width: 360px) {
-  .frame__content { padding: 8px 20px; }
-  .cd-box span { font-size: 24px; }
-  .phone-btn { font-size: 14px; }
-  .circle-photo { width: 64%; }
+  .frame__content { padding: 6px 16px; }
+  .phone-btn      { font-size: 13px; padding: 10px 0; }
+  .circle-photo   { width: min(60%, 32vh); }
+  .schedule-photo { max-height: 38%; }
+  .save-photo     { width: 86%; max-width: 240px; }
+}
+
+/* Short screens (landscape phones, small devices) */
+@media (max-height: 640px) {
+  .frame { padding: 14px 10px 12px; }
+  .circle-photo  { width: min(52%, 30vh); max-width: 210px; }
+  .save-photo    { max-height: 34vh; }
+  .schedule-photo { max-height: 38%; }
+  .cd-grid       { margin: 8px 0 12px; }
+  .cd-box        { padding: 8px 0 6px; }
+  .h-footer      { padding-top: 8px; font-size: 10px; }
+  .person-quote  { font-size: 11px; margin: 8px 0 10px; }
+}
+
+/* Tablets / larger phones — keep card focused in viewport center */
+@media (min-width: 500px) {
+  .frame { max-width: min(88vw, 440px); }
+}
+
+/* Desktop — centered card, showcase the decor around it */
+@media (min-width: 900px) {
+  .frame          { max-width: 440px; max-height: 820px; }
+  .decor-leaves   { width: 50%; height: 50%; }
+  .decor-leaves--left  { left: -2%; }
+  .decor-leaves--right { right: -2%; }
+  .decor-twig     { left: 12%; width: 80px; }
+  .decor-berries  { right: 8%; width: 130px; }
+  .music-btn      { top: 24px; right: 24px; }
+  .pager-dots     { right: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
