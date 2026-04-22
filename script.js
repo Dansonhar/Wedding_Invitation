@@ -125,21 +125,93 @@
   if (els.d) { tick(); setInterval(tick, 1000); }
 
   /* ── 3 · RSVP ───────────────────────────────────────────── */
+  // Google Apps Script Web app URL — writes each submission into
+  // the RSVP sheet. Paste the deploy URL here once you run the
+  // Apps Script deploy step (see admin.html for details).
+  const RSVP_ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE';
+
   const form = document.getElementById('rsvpForm');
   if (form) {
+    // Show/hide the dietary "please specify" input when user
+    // selects Yes / No. Auto-focus the input when it appears.
+    const dietInput = form.querySelector('.rsvp-diet-input');
+    form.querySelectorAll('input[name="dietary"]').forEach((r) => {
+      r.addEventListener('change', () => {
+        const show = form.dietary.value === 'yes';
+        if (dietInput) {
+          dietInput.hidden = !show;
+          if (show) setTimeout(() => dietInput.focus(), 50);
+          else dietInput.value = '';
+        }
+      });
+    });
+
+    // Clear the invalid highlight when the user interacts with a group
+    form.querySelectorAll('.rsvp-group').forEach((g) => {
+      g.addEventListener('change', () => g.classList.remove('is-invalid'));
+      g.addEventListener('input',  () => g.classList.remove('is-invalid'));
+    });
+
+    function getField(name) {
+      const el = form.elements[name];
+      if (!el) return '';
+      // RadioNodeList has .value for the checked input (or '')
+      return (el.value || '').trim();
+    }
+    function groupOf(name) {
+      const el = form.elements[name];
+      const first = (el && el.length) ? el[0] : el;
+      return first && first.closest ? first.closest('.rsvp-group') : null;
+    }
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const name = form.name.value.trim();
-      const side = form.side.value;
-      const main = form.main.value;
-      if (!name || !side || !main) {
-        const miss = !name ? form.name : !side ? form.side : form.main;
-        if (miss && miss.focus) miss.focus();
+
+      // Validate in order so we can jump to the first missing one
+      const checks = ['name', 'attend', 'side', 'main', 'dietary'];
+      let firstMissingGroup = null;
+      checks.forEach((n) => {
+        const group = groupOf(n);
+        if (!getField(n)) {
+          if (group) group.classList.add('is-invalid');
+          if (!firstMissingGroup) firstMissingGroup = group;
+        }
+      });
+
+      if (firstMissingGroup) {
+        firstMissingGroup.scrollIntoView({
+          behavior: prefersReducedMotion ? 'auto' : 'smooth',
+          block: 'center'
+        });
+        const focusable = firstMissingGroup.querySelector('input, select');
+        if (focusable && focusable.focus) focusable.focus();
         return;
       }
+
+      // All good — disable and show success immediately, fire the
+      // write to the Apps Script in the background. We don't await
+      // it because (a) UX feels instant and (b) fire-and-forget with
+      // FormData skips the CORS preflight.
       form.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
       const ok = document.getElementById('rsvpSuccess');
-      if (ok) ok.hidden = false;
+      if (ok) {
+        ok.hidden = false;
+        ok.scrollIntoView({
+          behavior: prefersReducedMotion ? 'auto' : 'smooth',
+          block: 'center'
+        });
+      }
+
+      if (!RSVP_ENDPOINT.startsWith('PASTE_')) {
+        try {
+          const fd = new FormData(form);
+          // Apps Script doesn't care about CORS for FormData POSTs;
+          // we can't read the response (no-cors) but Sheets will
+          // receive the row just fine.
+          fetch(RSVP_ENDPOINT, { method: 'POST', body: fd, mode: 'no-cors' })
+            .catch(() => { /* swallow — user already saw success */ });
+        } catch (_) { /* ignore */ }
+      }
     });
   }
 

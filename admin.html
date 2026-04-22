@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RSVP Admin — Adrian &amp; Charlotte</title>
+  <meta name="robots" content="noindex,nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --c-bg:       #faf7f0;
+      --c-card:     #ffffff;
+      --c-ink:      #2e2418;
+      --c-ink-soft: #6a594a;
+      --c-gold:     #9c7b55;
+      --c-gold-2:   #b69571;
+      --c-line:     #e6dcc8;
+      --c-ok:       #3a8a5e;
+      --c-no:       #c25454;
+      --c-blue:     #6a8a9c;
+      --f-serif:    'Cormorant Garamond', serif;
+      --f-cap:      'Cinzel', serif;
+      --f-sans:     'Montserrat', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--c-bg); color: var(--c-ink); font-family: var(--f-sans); -webkit-font-smoothing: antialiased; }
+    a { color: var(--c-gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button { font: inherit; cursor: pointer; border: none; }
+
+    /* ── Header ─────────────────────────── */
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      background: var(--c-card);
+      border-bottom: 1px solid var(--c-line);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .topbar h1 {
+      margin: 0;
+      font-family: var(--f-cap);
+      font-size: 18px;
+      letter-spacing: 3px;
+      color: var(--c-ink);
+      font-weight: 500;
+    }
+    .topbar h1 small { color: var(--c-gold); font-size: 12px; letter-spacing: 2px; display: block; margin-top: 2px;}
+    .topbar-actions { display: flex; gap: 8px; align-items: center; }
+    .btn {
+      padding: 8px 14px;
+      border-radius: 6px;
+      background: var(--c-ink);
+      color: #fff;
+      font-size: 13px;
+      letter-spacing: 1px;
+      font-family: var(--f-cap);
+      transition: background .2s, transform .1s;
+    }
+    .btn:hover { background: #3a2e20; }
+    .btn:active { transform: scale(.97); }
+    .btn--ghost { background: transparent; color: var(--c-ink); border: 1px solid var(--c-line); }
+    .btn--ghost:hover { background: #f3ece0; }
+    .btn--danger { background: var(--c-no); }
+    .btn--danger:hover { background: #a24040; }
+
+    /* ── Main content ─────────────────────── */
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 20px 80px; }
+
+    /* ── Stat cards ───────────────────────── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .stat {
+      background: var(--c-card);
+      border: 1px solid var(--c-line);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .stat__label { font-size: 11px; letter-spacing: 2px; color: var(--c-ink-soft); text-transform: uppercase; font-family: var(--f-cap); }
+    .stat__value { font-family: var(--f-serif); font-size: 34px; color: var(--c-ink); font-weight: 500; margin-top: 4px; line-height: 1; }
+    .stat__sub { font-size: 12px; color: var(--c-ink-soft); margin-top: 6px; }
+
+    .stat--yes .stat__value { color: var(--c-ok); }
+    .stat--no  .stat__value { color: var(--c-no); }
+    .stat--gold .stat__value { color: var(--c-gold); }
+
+    /* ── Breakdown mini bars ─────────────── */
+    .breakdowns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .panel {
+      background: var(--c-card);
+      border: 1px solid var(--c-line);
+      border-radius: 10px;
+      padding: 16px 20px;
+    }
+    .panel h3 {
+      font-family: var(--f-cap);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin: 0 0 12px;
+      color: var(--c-gold);
+      text-transform: uppercase;
+    }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
+    .bar-row__label { flex: 0 0 90px; font-size: 13px; font-family: var(--f-serif); color: var(--c-ink); }
+    .bar-row__track { flex: 1; height: 8px; background: #eee5d0; border-radius: 99px; overflow: hidden; }
+    .bar-row__fill { height: 100%; background: var(--c-gold); border-radius: 99px; transition: width .5s ease; }
+    .bar-row__n { flex: 0 0 auto; font-size: 13px; color: var(--c-ink-soft); min-width: 28px; text-align: right; }
+
+    /* ── Filter bar ──────────────────────── */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-bar input, .filter-bar select {
+      padding: 9px 12px;
+      border: 1px solid var(--c-line);
+      border-radius: 6px;
+      background: #fff;
+      font-size: 14px;
+      font-family: var(--f-sans);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .filter-bar input:focus, .filter-bar select:focus { border-color: var(--c-gold); }
+    .filter-bar input { flex: 1 1 200px; min-width: 0; }
+
+    /* ── Table ────────────────────────────── */
+    .table-wrap {
+      background: var(--c-card);
+      border: 1px solid var(--c-line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead th {
+      text-align: left;
+      padding: 12px 14px;
+      background: #f7f1e3;
+      font-family: var(--f-cap);
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--c-ink);
+      border-bottom: 1px solid var(--c-line);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #f1eadb;
+      font-family: var(--f-serif);
+      font-size: 15px;
+      color: var(--c-ink);
+      vertical-align: top;
+    }
+    tbody tr:hover { background: #faf5ea; }
+    tbody tr:last-child td { border-bottom: 0; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      font-family: var(--f-cap);
+      text-transform: uppercase;
+    }
+    .badge--yes   { background: #e3f1e9; color: var(--c-ok); }
+    .badge--no    { background: #f9e6e6; color: var(--c-no); }
+    .badge--gold  { background: #f4e9d6; color: var(--c-gold); }
+    .badge--bride { background: #f9ece6; color: #b26a4b; }
+    .badge--groom { background: #e6eef4; color: var(--c-blue); }
+    .badge--both  { background: #f0eaf4; color: #7a5a9c; }
+
+    .dietary-cell { max-width: 240px; font-size: 13px; color: var(--c-ink-soft); }
+    .timestamp { font-family: var(--f-sans); font-size: 12px; color: var(--c-ink-soft); white-space: nowrap; }
+
+    /* ── Empty / loading states ─────────── */
+    .empty, .loading {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--c-ink-soft);
+    }
+    .empty h2 {
+      font-family: var(--f-serif);
+      font-size: 24px;
+      color: var(--c-ink);
+      margin: 0 0 8px;
+    }
+    .spinner {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 3px solid #eee5d0;
+      border-top-color: var(--c-gold);
+      animation: spin 1s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Login gate ─────────────────────── */
+    .login {
+      position: fixed;
+      inset: 0;
+      background: var(--c-bg);
+      display: grid;
+      place-items: center;
+      z-index: 100;
+    }
+    .login__card {
+      background: var(--c-card);
+      border: 1px solid var(--c-line);
+      border-radius: 12px;
+      padding: 32px;
+      width: 92%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .login__card h1 {
+      font-family: var(--f-cap);
+      font-size: 18px;
+      letter-spacing: 3px;
+      color: var(--c-ink);
+      margin: 0 0 6px;
+    }
+    .login__card p { font-family: var(--f-serif); color: var(--c-ink-soft); margin: 0 0 22px; font-size: 15px; }
+    .login__card input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--c-line);
+      border-radius: 6px;
+      background: #fff;
+      font-size: 15px;
+      font-family: var(--f-serif);
+      outline: none;
+      margin-bottom: 12px;
+    }
+    .login__card input:focus { border-color: var(--c-gold); }
+    .login__card .btn { width: 100%; padding: 12px; font-size: 14px; }
+    .login__err { color: var(--c-no); font-size: 13px; margin-top: 10px; min-height: 18px; }
+
+    /* ── Mobile ──────────────────────────── */
+    @media (max-width: 640px) {
+      .topbar { padding: 12px 14px; }
+      .topbar h1 { font-size: 15px; letter-spacing: 2px; }
+      .wrap { padding: 16px 12px 80px; }
+      .stat { padding: 14px; }
+      .stat__value { font-size: 28px; }
+      thead th, tbody td { padding: 10px 10px; font-size: 13px; }
+      tbody td { font-size: 13px; }
+      .mobile-hide { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Password gate -->
+  <div class="login" id="login">
+    <div class="login__card">
+      <h1>RSVP ADMIN</h1>
+      <p>Enter the admin password to view responses.</p>
+      <input id="pwInput" type="password" placeholder="Password" autocomplete="current-password" />
+      <button class="btn" id="pwBtn">Unlock</button>
+      <div class="login__err" id="pwErr"></div>
+    </div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="topbar" hidden id="topbar">
+    <h1>
+      RSVP ADMIN
+      <small>Adrian &amp; Charlotte · 10 October 2026</small>
+    </h1>
+    <div class="topbar-actions">
+      <a class="btn btn--ghost" href="https://docs.google.com/spreadsheets/d/1IcsMw37Wu9Cfjakus9GNOmIss1LbryIV8sH42UdsM7E/edit" target="_blank" rel="noopener">Open Sheet</a>
+      <button class="btn btn--ghost" id="refreshBtn">Refresh</button>
+      <button class="btn btn--ghost" id="logoutBtn">Logout</button>
+    </div>
+  </header>
+
+  <main class="wrap" hidden id="wrap">
+
+    <!-- Stat cards -->
+    <section class="stats" id="stats"></section>
+
+    <!-- Breakdowns -->
+    <section class="breakdowns" id="breakdowns"></section>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <input id="searchInput" type="text" placeholder="Search by name…" />
+      <select id="filterAttend">
+        <option value="">All attendance</option>
+        <option value="yes">Attending</option>
+        <option value="no">Declined</option>
+      </select>
+      <select id="filterSide">
+        <option value="">All sides</option>
+        <option value="bride">Bride's guests</option>
+        <option value="groom">Groom's guests</option>
+        <option value="both">Both</option>
+      </select>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <div id="tableHost">
+        <div class="loading"><div class="spinner"></div>Loading responses…</div>
+      </div>
+    </div>
+  </main>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ─────────────────────────────────────────────────────────
+     CONFIG — fill in after you deploy the Apps Script
+     ─────────────────────────────────────────────────────── */
+  const SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE';
+  const ADMIN_PASSWORD = 'danson2026';   // change anytime; must match SECRET_TOKEN in the script
+  /* ───────────────────────────────────────────────────── */
+
+  const q = sel => document.querySelector(sel);
+
+  const loginEl   = q('#login');
+  const pwInput   = q('#pwInput');
+  const pwBtn     = q('#pwBtn');
+  const pwErr     = q('#pwErr');
+  const topbar    = q('#topbar');
+  const wrap      = q('#wrap');
+  const refreshBtn = q('#refreshBtn');
+  const logoutBtn = q('#logoutBtn');
+  const tableHost = q('#tableHost');
+  const searchInput = q('#searchInput');
+  const filterAttend = q('#filterAttend');
+  const filterSide   = q('#filterSide');
+
+  let rows = [];
+
+  /* ── Login ──────────────────────────────────────────── */
+  function unlock() {
+    loginEl.style.display = 'none';
+    topbar.hidden = false;
+    wrap.hidden = false;
+    loadData();
+  }
+
+  function tryLogin() {
+    const v = pwInput.value.trim();
+    if (v === ADMIN_PASSWORD) {
+      localStorage.setItem('rsvp_admin_ok', '1');
+      unlock();
+    } else {
+      pwErr.textContent = 'Incorrect password';
+      pwInput.focus();
+      pwInput.select();
+    }
+  }
+  pwBtn.addEventListener('click', tryLogin);
+  pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('rsvp_admin_ok');
+    location.reload();
+  });
+  refreshBtn.addEventListener('click', loadData);
+
+  // Auto-unlock if previously logged in
+  if (localStorage.getItem('rsvp_admin_ok') === '1') {
+    unlock();
+  } else {
+    setTimeout(() => pwInput.focus(), 100);
+  }
+
+  /* ── Load data from Apps Script ────────────────────── */
+  async function loadData() {
+    tableHost.innerHTML = '<div class="loading"><div class="spinner"></div>Loading responses…</div>';
+    q('#stats').innerHTML = '';
+    q('#breakdowns').innerHTML = '';
+
+    if (SCRIPT_URL.startsWith('PASTE_')) {
+      tableHost.innerHTML = `
+        <div class="empty">
+          <h2>Backend not connected yet</h2>
+          <p>Paste your Google Apps Script Web app URL into <code>SCRIPT_URL</code> at the top of this page (<code>admin.html</code>), then refresh.</p>
+        </div>`;
+      return;
+    }
+
+    try {
+      const url = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(ADMIN_PASSWORD);
+      const res = await fetch(url, { cache: 'no-store' });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      rows = (data.rows || []).reverse();  // newest first
+      render();
+    } catch (err) {
+      tableHost.innerHTML = `
+        <div class="empty">
+          <h2>Couldn't load responses</h2>
+          <p>${String(err.message || err)}</p>
+          <p style="font-size:13px;margin-top:16px;">
+            Check that the Apps Script is deployed, the token matches, and the web app is set to "Anyone".
+          </p>
+        </div>`;
+    }
+  }
+
+  /* ── Filtering ─────────────────────────────────────── */
+  function filteredRows() {
+    const search = searchInput.value.trim().toLowerCase();
+    const attend = filterAttend.value;
+    const side   = filterSide.value;
+    return rows.filter(r => {
+      if (search && !(r.Name || '').toLowerCase().includes(search)) return false;
+      if (attend && (r.Attending || '').toLowerCase() !== attend) return false;
+      if (side   && (r['Guest Of'] || '').toLowerCase() !== side)  return false;
+      return true;
+    });
+  }
+
+  [searchInput, filterAttend, filterSide].forEach(el => el.addEventListener('input', render));
+
+  /* ── Render ────────────────────────────────────────── */
+  function render() {
+    const list = filteredRows();
+    renderStats(rows);
+    renderBreakdowns(rows);
+    renderTable(list);
+  }
+
+  function renderStats(all) {
+    const total = all.length;
+    const yes   = all.filter(r => (r.Attending || '').toLowerCase() === 'yes').length;
+    const no    = all.filter(r => (r.Attending || '').toLowerCase() === 'no').length;
+    const dietary = all.filter(r => (r.Dietary || '').toLowerCase() === 'yes').length;
+
+    q('#stats').innerHTML = `
+      <div class="stat">
+        <div class="stat__label">Total Responses</div>
+        <div class="stat__value">${total}</div>
+      </div>
+      <div class="stat stat--yes">
+        <div class="stat__label">Attending</div>
+        <div class="stat__value">${yes}</div>
+      </div>
+      <div class="stat stat--no">
+        <div class="stat__label">Declined</div>
+        <div class="stat__value">${no}</div>
+      </div>
+      <div class="stat stat--gold">
+        <div class="stat__label">Special Diets</div>
+        <div class="stat__value">${dietary}</div>
+      </div>
+    `;
+  }
+
+  function renderBreakdowns(all) {
+    // Main course breakdown (only for attending guests)
+    const attending = all.filter(r => (r.Attending || '').toLowerCase() === 'yes');
+    const meal = { fish: 0, beef: 0, chicken: 0 };
+    attending.forEach(r => {
+      const m = (r['Main Course'] || '').toLowerCase();
+      if (meal[m] !== undefined) meal[m]++;
+    });
+    const mealMax = Math.max(1, ...Object.values(meal));
+
+    // Side breakdown
+    const side = { bride: 0, groom: 0, both: 0 };
+    all.forEach(r => {
+      const s = (r['Guest Of'] || '').toLowerCase();
+      if (side[s] !== undefined) side[s]++;
+    });
+    const sideMax = Math.max(1, ...Object.values(side));
+
+    function row(label, n, max) {
+      return `
+        <div class="bar-row">
+          <span class="bar-row__label">${label}</span>
+          <span class="bar-row__track"><span class="bar-row__fill" style="width:${(n / max) * 100}%"></span></span>
+          <span class="bar-row__n">${n}</span>
+        </div>`;
+    }
+
+    q('#breakdowns').innerHTML = `
+      <div class="panel">
+        <h3>Main Course (Attending)</h3>
+        ${row('Fish',    meal.fish,    mealMax)}
+        ${row('Beef',    meal.beef,    mealMax)}
+        ${row('Chicken', meal.chicken, mealMax)}
+      </div>
+      <div class="panel">
+        <h3>Guest Affiliation</h3>
+        ${row("Bride's", side.bride, sideMax)}
+        ${row("Groom's", side.groom, sideMax)}
+        ${row('Both',    side.both,  sideMax)}
+      </div>
+    `;
+  }
+
+  function renderTable(list) {
+    if (!list.length) {
+      tableHost.innerHTML = `
+        <div class="empty">
+          <h2>No responses yet</h2>
+          <p>Once guests submit the RSVP, they'll appear here.</p>
+        </div>`;
+      return;
+    }
+
+    const badgeAttend = v => {
+      v = (v || '').toLowerCase();
+      if (v === 'yes') return '<span class="badge badge--yes">Yes</span>';
+      if (v === 'no')  return '<span class="badge badge--no">No</span>';
+      return v || '—';
+    };
+    const badgeSide = v => {
+      v = (v || '').toLowerCase();
+      if (v === 'bride') return '<span class="badge badge--bride">Bride\'s</span>';
+      if (v === 'groom') return '<span class="badge badge--groom">Groom\'s</span>';
+      if (v === 'both')  return '<span class="badge badge--both">Both</span>';
+      return v || '—';
+    };
+    const cap = s => (s || '').replace(/\b\w/g, c => c.toUpperCase()) || '—';
+    const fmtTime = t => {
+      if (!t) return '—';
+      const d = new Date(t);
+      if (isNaN(d.getTime())) return t;
+      return d.toLocaleString('en-MY', { dateStyle: 'medium', timeStyle: 'short' });
+    };
+    const esc = s => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    tableHost.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Attending</th>
+            <th>Guest Of</th>
+            <th>Main Course</th>
+            <th>Dietary</th>
+            <th class="mobile-hide">Submitted</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${list.map(r => `
+            <tr>
+              <td><strong>${esc(r.Name) || '—'}</strong></td>
+              <td>${badgeAttend(r.Attending)}</td>
+              <td>${badgeSide(r['Guest Of'])}</td>
+              <td>${cap(r['Main Course'])}</td>
+              <td class="dietary-cell">
+                ${(r.Dietary || '').toLowerCase() === 'yes'
+                  ? `<span class="badge badge--gold">Yes</span> ${esc(r['Dietary Details']) || ''}`
+                  : '<span style="color:#aaa">None</span>'}
+              </td>
+              <td class="timestamp mobile-hide">${fmtTime(r.Timestamp)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+})();
+</script>
+</body>
+</html>
