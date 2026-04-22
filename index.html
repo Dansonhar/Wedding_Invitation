@@ -437,29 +437,86 @@
           </div>
 
           <form class="rsvp anim anim-left" id="rsvpForm" style="--i:5" novalidate>
-            <label class="rsvp-field">
-              <span class="req">*</span>
-              <input name="name" type="text" placeholder="Name" required />
-            </label>
-            <label class="rsvp-field">
-              <span class="req">*</span>
-              <select name="side" required>
-                <option value="" disabled selected>Groom / Bride</option>
-                <option value="groom">Groom</option>
-                <option value="bride">Bride</option>
-              </select>
-            </label>
-            <label class="rsvp-field">
-              <span class="req">*</span>
-              <select name="main" required>
-                <option value="" disabled selected>Beef / Fish / Chicken</option>
-                <option value="beef">Beef</option>
-                <option value="fish">Fish</option>
-                <option value="chicken">Chicken</option>
-              </select>
-            </label>
+            <fieldset class="rsvp-group">
+              <legend><span class="req">*</span> Your Name</legend>
+              <input class="rsvp-input" name="name" type="text" placeholder="Enter your name" autocomplete="name" required />
+            </fieldset>
+
+            <fieldset class="rsvp-group">
+              <legend><span class="req">*</span> Will you be attending?</legend>
+              <div class="rsvp-pills rsvp-pills--2">
+                <label class="rsvp-pill">
+                  <input type="radio" name="attend" value="yes" required>
+                  <span>Yes, with pleasure</span>
+                </label>
+                <label class="rsvp-pill">
+                  <input type="radio" name="attend" value="no">
+                  <span>Regretfully decline</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="rsvp-group">
+              <legend><span class="req">*</span> Guest Affiliation</legend>
+              <div class="rsvp-pills rsvp-pills--3">
+                <label class="rsvp-pill">
+                  <input type="radio" name="side" value="bride" required>
+                  <span>Bride’s</span>
+                </label>
+                <label class="rsvp-pill">
+                  <input type="radio" name="side" value="groom">
+                  <span>Groom’s</span>
+                </label>
+                <label class="rsvp-pill">
+                  <input type="radio" name="side" value="both">
+                  <span>Both</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="rsvp-group">
+              <legend><span class="req">*</span> Main Course</legend>
+              <div class="rsvp-pills rsvp-pills--3">
+                <label class="rsvp-pill">
+                  <input type="radio" name="main" value="fish" required>
+                  <span>Fish</span>
+                </label>
+                <label class="rsvp-pill">
+                  <input type="radio" name="main" value="beef">
+                  <span>Beef</span>
+                </label>
+                <label class="rsvp-pill">
+                  <input type="radio" name="main" value="chicken">
+                  <span>Chicken</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="rsvp-group">
+              <legend><span class="req">*</span> Dietary Requirements</legend>
+              <div class="rsvp-pills rsvp-pills--2">
+                <label class="rsvp-pill">
+                  <input type="radio" name="dietary" value="none" required>
+                  <span>No restrictions</span>
+                </label>
+                <label class="rsvp-pill">
+                  <input type="radio" name="dietary" value="yes">
+                  <span>Yes, specify</span>
+                </label>
+              </div>
+              <input class="rsvp-input rsvp-diet-input" name="dietary_details" type="text" placeholder="Please specify your allergies or requirements…" hidden />
+            </fieldset>
+
             <button type="submit" class="submit-btn">Submit</button>
-            <p class="rsvp-ok" id="rsvpSuccess" hidden>✓ Thank you — your reply has been received.</p>
+
+            <div class="rsvp-ok" id="rsvpSuccess" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M7 12.5 l3.5 3.5 L17 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <p><strong>Thank you!</strong></p>
+              <p>Your reply has been received. We can’t wait to celebrate with you.</p>
+            </div>
           </form>
 
           <p class="h-footer anim" style="--i:6">WELCOME TO OUR WEDDING</p>
