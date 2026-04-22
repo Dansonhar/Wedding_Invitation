@@ -94,8 +94,13 @@
     else              goTo(current - 1);
   }, { passive: true });
 
-  // Keyboard
+  // Keyboard — but NEVER hijack while user is typing in a field
   window.addEventListener('keydown', (e) => {
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' ||
+              t.tagName === 'SELECT' || t.isContentEditable)) {
+      return;
+    }
     if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
       e.preventDefault(); goTo(current + 1);
     } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {

@@ -924,43 +924,100 @@ a { color: inherit; text-decoration: none; }
   opacity: .85;
 }
 
-.rsvp { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-.rsvp-field {
-  position: relative;
+.rsvp { display: flex; flex-direction: column; gap: clamp(10px, 1.6vh, 14px); margin-top: 4px; }
+
+.rsvp-group {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.rsvp-group legend {
+  font-family: var(--f-cap);
+  font-size: 10.5px;
+  letter-spacing: 2.5px;
+  color: var(--c-gold);
+  text-transform: uppercase;
+  margin: 0 0 6px;
+  padding: 0;
+  text-align: left;
   display: block;
-}
-.rsvp-field .req {
-  position: absolute;
-  left: 14px; top: 50%;
-  transform: translateY(-50%);
-  color: #d55;
-  font-size: 14px;
-  pointer-events: none;
-  z-index: 2;
-}
-.rsvp-field input,
-.rsvp-field select {
   width: 100%;
-  height: 46px;
-  padding: 0 14px 0 26px;
+}
+.rsvp-group legend .req { color: #d55; margin-right: 2px; }
+
+.rsvp-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
   border: 1px solid var(--c-input);
   border-radius: 6px;
   background: #fff;
   font-family: var(--f-serif);
-  font-size: 15px;
+  font-size: 16px;         /* 16px+ prevents iOS zoom-on-focus */
   color: var(--c-ink);
   -webkit-appearance: none;
   appearance: none;
   outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  touch-action: manipulation;
+  -webkit-user-select: text;
+  user-select: text;
 }
-.rsvp-field select {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%239c7b55' stroke-width='1.4'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-size: 10px;
+.rsvp-input:focus {
+  border-color: var(--c-gold);
+  box-shadow: 0 0 0 3px rgba(156,123,85,.15);
 }
-.rsvp-field input:focus,
-.rsvp-field select:focus { border-color: var(--c-gold); }
+
+/* ─── Clickable option pills ──────────────────────────── */
+.rsvp-pills {
+  display: grid;
+  gap: 6px;
+}
+.rsvp-pills--2 { grid-template-columns: 1fr 1fr; }
+.rsvp-pills--3 { grid-template-columns: repeat(3, 1fr); }
+
+.rsvp-pill {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+.rsvp-pill input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.rsvp-pill span {
+  display: block;
+  padding: 11px 6px;
+  border: 1px solid var(--c-input);
+  border-radius: 6px;
+  background: #fff;
+  font-family: var(--f-serif);
+  font-size: 13px;
+  color: var(--c-ink);
+  text-align: center;
+  line-height: 1.2;
+  transition: all .2s ease;
+  user-select: none;
+}
+.rsvp-pill:hover span { border-color: var(--c-gold); }
+.rsvp-pill input:checked + span {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+  box-shadow: 0 4px 10px -4px rgba(26,26,26,.35);
+}
+.rsvp-pill:active span { transform: scale(.96); }
+.rsvp-pill input:focus-visible + span { outline: 2px solid var(--c-gold); outline-offset: 2px; }
+
+.rsvp-diet-input {
+  margin-top: 8px;
+  height: 40px;
+  font-size: 14px;
+}
+.rsvp-diet-input[hidden] { display: none; }
 
 .submit-btn {
   height: 48px;
@@ -970,17 +1027,42 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--f-cap);
   font-size: 18px;
   letter-spacing: 1px;
-  margin-top: 4px;
-  transition: transform .15s, box-shadow .2s;
+  margin-top: 6px;
+  transition: transform .15s, box-shadow .2s, background .2s;
 }
 .submit-btn:active { transform: scale(.98); }
+.submit-btn:disabled { background: #7a7468; cursor: default; opacity: .8; }
+
+/* ─── Success confirmation ───────────────────────────── */
 .rsvp-ok {
   text-align: center;
   color: #3a8a5e;
   font-family: var(--f-serif);
-  font-size: 14px;
+  padding: 18px 12px;
   margin: 8px 0 0;
+  border-radius: 10px;
+  background: rgba(58, 138, 94, .08);
+  border: 1px solid rgba(58, 138, 94, .25);
+  animation: okPop .5s cubic-bezier(.22,1.35,.36,1) both;
 }
+.rsvp-ok[hidden] { display: none; }
+.rsvp-ok svg {
+  width: 48px; height: 48px;
+  margin: 0 auto 8px;
+  display: block;
+  color: #3a8a5e;
+}
+.rsvp-ok p { margin: 2px 0; font-size: 14px; line-height: 1.5; }
+.rsvp-ok p strong { font-size: 18px; font-weight: 600; color: #2c6e47; }
+@keyframes okPop {
+  from { opacity: 0; transform: scale(.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Invalid group highlight */
+.rsvp-group.is-invalid legend { color: #d55; }
+.rsvp-group.is-invalid .rsvp-pill span,
+.rsvp-group.is-invalid .rsvp-input { border-color: #e8b2b2; }
 
 /* ═══════════════════════════════════════════════════════
    Hidden YT player
