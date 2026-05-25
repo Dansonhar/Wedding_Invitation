@@ -70,6 +70,136 @@
     .btn--ghost:hover { background: #f3ece0; }
     .btn--danger { background: var(--c-no); }
     .btn--danger:hover { background: #a24040; }
+    .btn--gold { background: var(--c-gold); }
+    .btn--gold:hover { background: #876843; }
+
+    .row-actions { display: flex; gap: 6px; justify-content: flex-end; }
+    .icon-btn {
+      width: 32px; height: 32px;
+      border-radius: 6px;
+      background: transparent;
+      border: 1px solid var(--c-line);
+      color: var(--c-ink-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .15s;
+    }
+    .icon-btn svg { width: 16px; height: 16px; }
+    .icon-btn:hover { background: #f3ece0; color: var(--c-ink); }
+    .icon-btn--edit:hover { color: var(--c-gold); border-color: var(--c-gold); }
+    .icon-btn--del:hover  { color: var(--c-no); border-color: var(--c-no); background: #fceeee; }
+
+    /* ── Edit modal ──────────────────────── */
+    .modal {
+      position: fixed; inset: 0;
+      background: rgba(46,36,24,.5);
+      display: grid;
+      place-items: center;
+      z-index: 200;
+      padding: 16px;
+      animation: modalIn .25s ease both;
+    }
+    .modal[hidden] { display: none; }
+    @keyframes modalIn { from {opacity:0} to {opacity:1} }
+    .modal__card {
+      background: #fff;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px 22px;
+      box-shadow: 0 20px 60px -10px rgba(0,0,0,.3);
+      animation: modalCardIn .35s cubic-bezier(.22,1.2,.36,1) both;
+    }
+    @keyframes modalCardIn { from {transform:translateY(20px) scale(.96); opacity:0} to {transform:none; opacity:1} }
+    .modal__title {
+      font-family: var(--f-cap);
+      font-size: 14px;
+      letter-spacing: 3px;
+      color: var(--c-ink);
+      margin: 0 0 18px;
+    }
+    .modal__field { margin-bottom: 14px; }
+    .modal__field label {
+      display: block;
+      font-family: var(--f-cap);
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--c-ink-soft);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .modal__field input,
+    .modal__field select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--c-line);
+      border-radius: 6px;
+      font-family: var(--f-serif);
+      font-size: 15px;
+      background: #fff;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .modal__field input:focus,
+    .modal__field select:focus { border-color: var(--c-gold); }
+    .modal__actions { display: flex; gap: 10px; margin-top: 18px; }
+    .modal__actions .btn { flex: 1; padding: 12px; }
+
+    /* ── Confirm dialog ──────────────────── */
+    .confirm {
+      position: fixed; inset: 0;
+      background: rgba(46,36,24,.55);
+      display: grid;
+      place-items: center;
+      z-index: 250;
+      padding: 16px;
+    }
+    .confirm[hidden] { display: none; }
+    .confirm__card {
+      background: #fff;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 360px;
+      padding: 24px;
+      text-align: center;
+      animation: modalCardIn .3s cubic-bezier(.22,1.2,.36,1) both;
+    }
+    .confirm__icon {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: #fceeee;
+      color: var(--c-no);
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+    }
+    .confirm__icon svg { width: 24px; height: 24px; }
+    .confirm__title { font-family: var(--f-serif); font-size: 19px; font-weight: 600; margin: 0 0 6px; color: var(--c-ink); }
+    .confirm__msg { font-family: var(--f-serif); font-size: 14px; color: var(--c-ink-soft); margin: 0 0 18px; line-height: 1.5; }
+
+    /* Toast notifications */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--c-ink);
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 99px;
+      font-size: 14px;
+      font-family: var(--f-serif);
+      z-index: 300;
+      box-shadow: 0 8px 24px rgba(0,0,0,.2);
+      animation: toastIn .3s ease both;
+    }
+    @keyframes toastIn { from {opacity:0; transform:translate(-50%, 16px)} to {opacity:1; transform:translate(-50%, 0)} }
+    .toast--ok { background: var(--c-ok); }
+    .toast--err { background: var(--c-no); }
 
     /* ── Main content ─────────────────────── */
     .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 20px 80px; }
@@ -327,6 +457,76 @@
     </div>
   </main>
 
+  <!-- Edit modal -->
+  <div class="modal" id="editModal" hidden>
+    <div class="modal__card">
+      <h2 class="modal__title">EDIT RSVP</h2>
+      <div class="modal__field">
+        <label>Name</label>
+        <input id="editName" type="text" />
+      </div>
+      <div class="modal__field">
+        <label>Attending</label>
+        <select id="editAttend">
+          <option value="">— Not set —</option>
+          <option value="yes">Yes, with pleasure</option>
+          <option value="no">Regretfully decline</option>
+        </select>
+      </div>
+      <div class="modal__field">
+        <label>Guest Affiliation</label>
+        <select id="editSide">
+          <option value="">— Not set —</option>
+          <option value="bride">Bride's</option>
+          <option value="groom">Groom's</option>
+          <option value="both">Both</option>
+        </select>
+      </div>
+      <div class="modal__field">
+        <label>Main Course</label>
+        <select id="editMain">
+          <option value="">— Not set —</option>
+          <option value="fish">Fish</option>
+          <option value="beef">Beef</option>
+          <option value="chicken">Chicken</option>
+        </select>
+      </div>
+      <div class="modal__field">
+        <label>Dietary</label>
+        <select id="editDietary">
+          <option value="">— Not set —</option>
+          <option value="none">No restrictions</option>
+          <option value="yes">Yes, specify</option>
+        </select>
+      </div>
+      <div class="modal__field">
+        <label>Dietary Details</label>
+        <input id="editDietaryDetails" type="text" placeholder="Allergies / restrictions…" />
+      </div>
+      <div class="modal__actions">
+        <button class="btn btn--ghost" id="editCancel">Cancel</button>
+        <button class="btn btn--gold" id="editSave">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete confirm -->
+  <div class="confirm" id="deleteConfirm" hidden>
+    <div class="confirm__card">
+      <div class="confirm__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        </svg>
+      </div>
+      <h2 class="confirm__title">Delete this RSVP?</h2>
+      <p class="confirm__msg" id="confirmMsg">This row will be permanently removed from the sheet.</p>
+      <div class="modal__actions">
+        <button class="btn btn--ghost" id="deleteCancel">Cancel</button>
+        <button class="btn btn--danger" id="deleteOk">Delete</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 (() => {
   'use strict';
@@ -558,11 +758,12 @@
             <th>Main Course</th>
             <th>Dietary</th>
             <th class="mobile-hide">Submitted</th>
+            <th style="text-align:right;">Actions</th>
           </tr>
         </thead>
         <tbody>
           ${list.map(r => `
-            <tr>
+            <tr data-row="${r._row || ''}">
               <td><strong>${esc(r.Name) || '—'}</strong></td>
               <td>${badgeAttend(r.Attending)}</td>
               <td>${badgeSide(r['Guest Of'])}</td>
@@ -573,11 +774,121 @@
                   : '<span style="color:#aaa">None</span>'}
               </td>
               <td class="timestamp mobile-hide">${fmtTime(r.Timestamp)}</td>
+              <td>
+                <div class="row-actions">
+                  <button class="icon-btn icon-btn--edit" data-action="edit" data-row="${r._row || ''}" title="Edit" aria-label="Edit">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                  </button>
+                  <button class="icon-btn icon-btn--del" data-action="delete" data-row="${r._row || ''}" title="Delete" aria-label="Delete">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                  </button>
+                </div>
+              </td>
             </tr>
           `).join('')}
         </tbody>
       </table>
     `;
+
+    // Wire up action buttons
+    tableHost.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const rowIdx = parseInt(btn.dataset.row, 10);
+        const record = rows.find(r => r._row === rowIdx);
+        if (!record) { toast('Row not found', 'err'); return; }
+        if (btn.dataset.action === 'edit')   openEdit(record);
+        if (btn.dataset.action === 'delete') openDelete(record);
+      });
+    });
+  }
+
+  /* ── Edit modal ────────────────────────────────────── */
+  const editModal = q('#editModal');
+  let editingRow = null;
+  function openEdit(r) {
+    editingRow = r._row;
+    q('#editName').value           = r.Name || '';
+    q('#editAttend').value         = (r.Attending || '').toLowerCase();
+    q('#editSide').value            = (r['Guest Of'] || '').toLowerCase();
+    q('#editMain').value            = (r['Main Course'] || '').toLowerCase();
+    q('#editDietary').value         = (r.Dietary || '').toLowerCase();
+    q('#editDietaryDetails').value = r['Dietary Details'] || '';
+    editModal.hidden = false;
+  }
+  q('#editCancel').addEventListener('click', () => { editModal.hidden = true; });
+  editModal.addEventListener('click', e => { if (e.target === editModal) editModal.hidden = true; });
+  q('#editSave').addEventListener('click', async () => {
+    if (!editingRow) return;
+    const values = {
+      'Name':            q('#editName').value.trim(),
+      'Attending':       q('#editAttend').value,
+      'Guest Of':         q('#editSide').value,
+      'Main Course':      q('#editMain').value,
+      'Dietary':          q('#editDietary').value,
+      'Dietary Details': q('#editDietaryDetails').value.trim(),
+    };
+    const ok = await apiPost({ action: 'update', rowIndex: editingRow, values });
+    if (ok) {
+      editModal.hidden = true;
+      toast('Saved', 'ok');
+      loadData();
+    } else {
+      toast('Save failed', 'err');
+    }
+  });
+
+  /* ── Delete confirm ───────────────────────────────── */
+  const deleteConfirm = q('#deleteConfirm');
+  let deletingRow = null;
+  function openDelete(r) {
+    deletingRow = r._row;
+    q('#confirmMsg').textContent = `Delete the RSVP from ${r.Name || 'this guest'}? This cannot be undone.`;
+    deleteConfirm.hidden = false;
+  }
+  q('#deleteCancel').addEventListener('click', () => { deleteConfirm.hidden = true; });
+  deleteConfirm.addEventListener('click', e => { if (e.target === deleteConfirm) deleteConfirm.hidden = true; });
+  q('#deleteOk').addEventListener('click', async () => {
+    if (!deletingRow) return;
+    const ok = await apiPost({ action: 'delete', rowIndex: deletingRow });
+    if (ok) {
+      deleteConfirm.hidden = true;
+      toast('Row deleted', 'ok');
+      loadData();
+    } else {
+      toast('Delete failed', 'err');
+    }
+  });
+
+  /* ── Apps Script POST helper ───────────────────────── */
+  async function apiPost(payload) {
+    if (SCRIPT_URL.startsWith('PASTE_')) {
+      toast('Backend not connected (paste SCRIPT_URL)', 'err');
+      return false;
+    }
+    try {
+      // Use text/plain Content-Type so the browser doesn't trigger a
+      // CORS preflight that Apps Script can't answer to.
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ ...payload, token: ADMIN_PASSWORD })
+      });
+      const json = await res.json();
+      return !!json.ok;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  }
+
+  /* ── Toast ────────────────────────────────────────── */
+  function toast(msg, kind) {
+    const t = document.createElement('div');
+    t.className = 'toast' + (kind ? ' toast--' + kind : '');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translate(-50%, 10px)'; }, 2200);
+    setTimeout(() => t.remove(), 2700);
   }
 })();
 </script>
