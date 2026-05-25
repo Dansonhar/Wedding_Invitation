@@ -5,6 +5,9 @@
   "description": "Static wedding invitation website",
   "scripts": {
     "dev": "python3 -m http.server 5500",
-    "start": "python3 -m http.server 5500"
+    "start": "python3 -m http.server 5500",
+    "build": "node build.js",
+    "preview": "python3 -m http.server 5501 --directory dist",
+    "clean": "rm -rf dist"
   }
 }

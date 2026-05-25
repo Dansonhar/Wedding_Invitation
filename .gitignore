@@ -13,3 +13,7 @@
 *.log
 .env
 .env.local
+
+# Build output
+dist/
+node_modules/
