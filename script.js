@@ -130,11 +130,9 @@
   if (els.d) { tick(); setInterval(tick, 1000); }
 
   /* ── 3 · RSVP ───────────────────────────────────────────── */
-  // POSTs to /api/rsvp on the same origin (Render serves both the
-  // static site and the API). If the API call fails, we still keep
-  // a localStorage fallback so the user's submission isn't lost.
-  const RSVP_STORE    = 'rsvp_submissions';
-  const RSVP_ENDPOINT = '/api/rsvp';
+  // localStorage-backed. Submissions are scoped to the browser they
+  // were typed in — for cross-device collection a backend is needed.
+  const RSVP_STORE = 'rsvp_submissions';
 
   const form = document.getElementById('rsvpForm');
   if (form) {
@@ -194,42 +192,23 @@
         return;
       }
 
-      // Collect submission payload
-      const payload = {
-        name:            getField('name'),
-        attend:          getField('attend'),
-        side:            getField('side'),
-        main:            getField('main'),
-        dietary:         getField('dietary'),
-        dietary_details: getField('dietary_details') || ''
-      };
-
-      // POST to the backend. If the server is reachable, we trust the
-      // server; otherwise we fall back to localStorage so the entry
-      // isn't lost (e.g. while previewing without a server).
-      fetch(RSVP_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-        .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); })
-        .catch((err) => {
-          console.warn('API unavailable, falling back to localStorage:', err);
-          try {
-            const list = JSON.parse(localStorage.getItem(RSVP_STORE) || '[]');
-            list.push({
-              _id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
-              Timestamp:        new Date().toISOString(),
-              Name:             payload.name,
-              Attending:        payload.attend,
-              'Guest Of':        payload.side,
-              'Main Course':     payload.main,
-              Dietary:           payload.dietary,
-              'Dietary Details': payload.dietary_details
-            });
-            localStorage.setItem(RSVP_STORE, JSON.stringify(list));
-          } catch (_) {}
+      // Save into localStorage. The admin page reads from the same key.
+      try {
+        const list = JSON.parse(localStorage.getItem(RSVP_STORE) || '[]');
+        list.push({
+          _id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+          Timestamp:         new Date().toISOString(),
+          Name:              getField('name'),
+          Attending:         getField('attend'),
+          'Guest Of':         getField('side'),
+          'Main Course':      getField('main'),
+          Dietary:            getField('dietary'),
+          'Dietary Details': getField('dietary_details') || ''
         });
+        localStorage.setItem(RSVP_STORE, JSON.stringify(list));
+      } catch (err) {
+        console.warn('Could not persist RSVP locally:', err);
+      }
 
       // Show success and disable the form
       form.querySelectorAll('input, select, button').forEach(el => el.disabled = true);

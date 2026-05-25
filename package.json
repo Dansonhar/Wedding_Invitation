@@ -2,20 +2,12 @@
   "name": "wedding-invitation",
   "version": "1.0.0",
   "private": true,
-  "description": "Static wedding invitation website with RSVP backend",
-  "engines": {
-    "node": ">=18"
-  },
+  "description": "Static wedding invitation website",
   "scripts": {
     "dev": "python3 -m http.server 5500",
-    "dev:server": "node server.js",
-    "start": "node server.js",
+    "start": "python3 -m http.server 5500",
     "build": "node build.js",
     "preview": "python3 -m http.server 5501 --directory dist",
     "clean": "rm -rf dist"
-  },
-  "dependencies": {
-    "express": "^4.19.2",
-    "pg": "^8.13.0"
   }
 }

@@ -1,23 +1,24 @@
-# Render Blueprint — describes the service so Render can spin it up
-# automatically when this repo is connected.
+# Render Blueprint — static-site hosting for the wedding invitation.
 #
-# After you log into Render, click "New +" → "Blueprint" → connect this
-# GitHub repo and Render reads this file. Then set DATABASE_URL and
-# ADMIN_TOKEN in the service's Environment tab (Render will prompt).
+# Render reads this file when you connect the repo. It runs `npm run
+# build` (which copies + minifies into dist/) and serves the dist/
+# folder behind Render's global CDN. No server-side code; no database.
 
 services:
   - type: web
     name: wedding-invitation
-    runtime: node
-    plan: free                  # 512MB RAM, sleeps after 15min idle
-    buildCommand: npm install
-    startCommand: node server.js
-    autoDeploy: true            # redeploys on every push to main
-    healthCheckPath: /api/health
-    envVars:
-      - key: DATABASE_URL
-        sync: false             # set manually in Render dashboard
-      - key: ADMIN_TOKEN
-        sync: false             # set manually in Render dashboard
-      - key: NODE_VERSION
-        value: 20
+    runtime: static
+    buildCommand: npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    routes:
+      - type: rewrite
+        source: /admin
+        destination: /admin.html
