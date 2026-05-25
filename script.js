@@ -130,10 +130,9 @@
   if (els.d) { tick(); setInterval(tick, 1000); }
 
   /* ── 3 · RSVP ───────────────────────────────────────────── */
-  // Google Apps Script Web app URL — writes each submission into
-  // the RSVP sheet. Paste the deploy URL here once you run the
-  // Apps Script deploy step (see admin.html for details).
-  const RSVP_ENDPOINT = 'PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE';
+  // Local-storage backed — every submission is appended to the
+  // 'rsvp_submissions' key, which the admin.html page reads.
+  const RSVP_STORE = 'rsvp_submissions';
 
   const form = document.getElementById('rsvpForm');
   if (form) {
@@ -193,10 +192,27 @@
         return;
       }
 
-      // All good — disable and show success immediately, fire the
-      // write to the Apps Script in the background. We don't await
-      // it because (a) UX feels instant and (b) fire-and-forget with
-      // FormData skips the CORS preflight.
+      // Save the RSVP into localStorage immediately. The admin page
+      // reads from this same key, so the row shows up the moment it
+      // refreshes.
+      try {
+        const list = JSON.parse(localStorage.getItem(RSVP_STORE) || '[]');
+        list.push({
+          _id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+          Timestamp:        new Date().toISOString(),
+          Name:             getField('name'),
+          Attending:        getField('attend'),
+          'Guest Of':        getField('side'),
+          'Main Course':     getField('main'),
+          Dietary:           getField('dietary'),
+          'Dietary Details': getField('dietary_details') || ''
+        });
+        localStorage.setItem(RSVP_STORE, JSON.stringify(list));
+      } catch (err) {
+        console.warn('Could not persist RSVP locally:', err);
+      }
+
+      // Show success and disable the form
       form.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
       const ok = document.getElementById('rsvpSuccess');
       if (ok) {
@@ -205,17 +221,6 @@
           behavior: prefersReducedMotion ? 'auto' : 'smooth',
           block: 'center'
         });
-      }
-
-      if (!RSVP_ENDPOINT.startsWith('PASTE_')) {
-        try {
-          const fd = new FormData(form);
-          // Apps Script doesn't care about CORS for FormData POSTs;
-          // we can't read the response (no-cors) but Sheets will
-          // receive the row just fine.
-          fetch(RSVP_ENDPOINT, { method: 'POST', body: fd, mode: 'no-cors' })
-            .catch(() => { /* swallow — user already saw success */ });
-        } catch (_) { /* ignore */ }
       }
     });
   }

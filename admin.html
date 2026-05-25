@@ -419,7 +419,7 @@
       <small>Adrian &amp; Charlotte · 10 October 2026</small>
     </h1>
     <div class="topbar-actions">
-      <a class="btn btn--ghost" href="https://docs.google.com/spreadsheets/d/1IcsMw37Wu9Cfjakus9GNOmIss1LbryIV8sH42UdsM7E/edit" target="_blank" rel="noopener">Open Sheet</a>
+      <button class="btn btn--ghost" id="exportBtn" title="Download all RSVPs as CSV">Export CSV</button>
       <button class="btn btn--ghost" id="refreshBtn">Refresh</button>
       <button class="btn btn--ghost" id="logoutBtn">Logout</button>
     </div>
@@ -532,11 +532,16 @@
   'use strict';
 
   /* ─────────────────────────────────────────────────────────
-     CONFIG — fill in after you deploy the Apps Script
+     Local-storage backed admin — no external backend required.
+     Submissions land here immediately from the RSVP form.
+
+     NOTE: localStorage is scoped per browser, per device. The
+     admin shows entries that were submitted *on this browser*.
+     For cross-device collection you would need a real backend
+     (Firebase / Supabase / Apps Script).
      ─────────────────────────────────────────────────────── */
-  const SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE';
-  const ADMIN_PASSWORD = 'danson2026';   // change anytime; must match SECRET_TOKEN in the script
-  /* ───────────────────────────────────────────────────── */
+  const STORAGE_KEY    = 'rsvp_submissions';
+  const ADMIN_PASSWORD = 'danson2026';   // change anytime
 
   const q = sel => document.querySelector(sel);
 
@@ -548,6 +553,7 @@
   const wrap      = q('#wrap');
   const refreshBtn = q('#refreshBtn');
   const logoutBtn = q('#logoutBtn');
+  const exportBtn = q('#exportBtn');
   const tableHost = q('#tableHost');
   const searchInput = q('#searchInput');
   const filterAttend = q('#filterAttend');
@@ -582,6 +588,14 @@
     location.reload();
   });
   refreshBtn.addEventListener('click', loadData);
+  exportBtn.addEventListener('click', exportCsv);
+
+  // Live updates: if a submission lands while admin is open, refresh
+  window.addEventListener('storage', (e) => {
+    if (e.key === STORAGE_KEY) loadData();
+  });
+  // Same-tab updates (storage event only fires cross-tab) — refresh on focus too
+  window.addEventListener('focus', loadData);
 
   // Auto-unlock if previously logged in
   if (localStorage.getItem('rsvp_admin_ok') === '1') {
@@ -590,38 +604,21 @@
     setTimeout(() => pwInput.focus(), 100);
   }
 
-  /* ── Load data from Apps Script ────────────────────── */
-  async function loadData() {
-    tableHost.innerHTML = '<div class="loading"><div class="spinner"></div>Loading responses…</div>';
-    q('#stats').innerHTML = '';
-    q('#breakdowns').innerHTML = '';
-
-    if (SCRIPT_URL.startsWith('PASTE_')) {
-      tableHost.innerHTML = `
-        <div class="empty">
-          <h2>Backend not connected yet</h2>
-          <p>Paste your Google Apps Script Web app URL into <code>SCRIPT_URL</code> at the top of this page (<code>admin.html</code>), then refresh.</p>
-        </div>`;
-      return;
-    }
-
+  /* ── Load data from localStorage ───────────────────── */
+  function readStore() {
     try {
-      const url = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(ADMIN_PASSWORD);
-      const res = await fetch(url, { cache: 'no-store' });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      rows = (data.rows || []).reverse();  // newest first
-      render();
-    } catch (err) {
-      tableHost.innerHTML = `
-        <div class="empty">
-          <h2>Couldn't load responses</h2>
-          <p>${String(err.message || err)}</p>
-          <p style="font-size:13px;margin-top:16px;">
-            Check that the Apps Script is deployed, the token matches, and the web app is set to "Anyone".
-          </p>
-        </div>`;
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    } catch (_) {
+      return [];
     }
+  }
+  function writeStore(arr) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+
+  function loadData() {
+    rows = readStore().slice().reverse();   // newest first
+    render();
   }
 
   /* ── Filtering ─────────────────────────────────────── */
@@ -763,7 +760,7 @@
         </thead>
         <tbody>
           ${list.map(r => `
-            <tr data-row="${r._row || ''}">
+            <tr data-id="${esc(r._id)}">
               <td><strong>${esc(r.Name) || '—'}</strong></td>
               <td>${badgeAttend(r.Attending)}</td>
               <td>${badgeSide(r['Guest Of'])}</td>
@@ -776,10 +773,10 @@
               <td class="timestamp mobile-hide">${fmtTime(r.Timestamp)}</td>
               <td>
                 <div class="row-actions">
-                  <button class="icon-btn icon-btn--edit" data-action="edit" data-row="${r._row || ''}" title="Edit" aria-label="Edit">
+                  <button class="icon-btn icon-btn--edit" data-action="edit" data-id="${esc(r._id)}" title="Edit" aria-label="Edit">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
                   </button>
-                  <button class="icon-btn icon-btn--del" data-action="delete" data-row="${r._row || ''}" title="Delete" aria-label="Delete">
+                  <button class="icon-btn icon-btn--del" data-action="delete" data-id="${esc(r._id)}" title="Delete" aria-label="Delete">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
                   </button>
                 </div>
@@ -793,8 +790,8 @@
     // Wire up action buttons
     tableHost.querySelectorAll('[data-action]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const rowIdx = parseInt(btn.dataset.row, 10);
-        const record = rows.find(r => r._row === rowIdx);
+        const id = btn.dataset.id;
+        const record = rows.find(r => r._id === id);
         if (!record) { toast('Row not found', 'err'); return; }
         if (btn.dataset.action === 'edit')   openEdit(record);
         if (btn.dataset.action === 'delete') openDelete(record);
@@ -806,7 +803,7 @@
   const editModal = q('#editModal');
   let editingRow = null;
   function openEdit(r) {
-    editingRow = r._row;
+    editingRow = r._id;
     q('#editName').value           = r.Name || '';
     q('#editAttend').value         = (r.Attending || '').toLowerCase();
     q('#editSide').value            = (r['Guest Of'] || '').toLowerCase();
@@ -817,9 +814,13 @@
   }
   q('#editCancel').addEventListener('click', () => { editModal.hidden = true; });
   editModal.addEventListener('click', e => { if (e.target === editModal) editModal.hidden = true; });
-  q('#editSave').addEventListener('click', async () => {
+  q('#editSave').addEventListener('click', () => {
     if (!editingRow) return;
-    const values = {
+    const all = readStore();
+    const idx = all.findIndex(r => r._id === editingRow);
+    if (idx === -1) { toast('Row not found', 'err'); return; }
+    all[idx] = {
+      ...all[idx],
       'Name':            q('#editName').value.trim(),
       'Attending':       q('#editAttend').value,
       'Guest Of':         q('#editSide').value,
@@ -827,58 +828,50 @@
       'Dietary':          q('#editDietary').value,
       'Dietary Details': q('#editDietaryDetails').value.trim(),
     };
-    const ok = await apiPost({ action: 'update', rowIndex: editingRow, values });
-    if (ok) {
-      editModal.hidden = true;
-      toast('Saved', 'ok');
-      loadData();
-    } else {
-      toast('Save failed', 'err');
-    }
+    writeStore(all);
+    editModal.hidden = true;
+    toast('Saved', 'ok');
+    loadData();
   });
 
   /* ── Delete confirm ───────────────────────────────── */
   const deleteConfirm = q('#deleteConfirm');
   let deletingRow = null;
   function openDelete(r) {
-    deletingRow = r._row;
+    deletingRow = r._id;
     q('#confirmMsg').textContent = `Delete the RSVP from ${r.Name || 'this guest'}? This cannot be undone.`;
     deleteConfirm.hidden = false;
   }
   q('#deleteCancel').addEventListener('click', () => { deleteConfirm.hidden = true; });
   deleteConfirm.addEventListener('click', e => { if (e.target === deleteConfirm) deleteConfirm.hidden = true; });
-  q('#deleteOk').addEventListener('click', async () => {
+  q('#deleteOk').addEventListener('click', () => {
     if (!deletingRow) return;
-    const ok = await apiPost({ action: 'delete', rowIndex: deletingRow });
-    if (ok) {
-      deleteConfirm.hidden = true;
-      toast('Row deleted', 'ok');
-      loadData();
-    } else {
-      toast('Delete failed', 'err');
-    }
+    const all = readStore().filter(r => r._id !== deletingRow);
+    writeStore(all);
+    deleteConfirm.hidden = true;
+    toast('Row deleted', 'ok');
+    loadData();
   });
 
-  /* ── Apps Script POST helper ───────────────────────── */
-  async function apiPost(payload) {
-    if (SCRIPT_URL.startsWith('PASTE_')) {
-      toast('Backend not connected (paste SCRIPT_URL)', 'err');
-      return false;
-    }
-    try {
-      // Use text/plain Content-Type so the browser doesn't trigger a
-      // CORS preflight that Apps Script can't answer to.
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ ...payload, token: ADMIN_PASSWORD })
-      });
-      const json = await res.json();
-      return !!json.ok;
-    } catch (err) {
-      console.error(err);
-      return false;
-    }
+  /* ── Export to CSV ─────────────────────────────────── */
+  function exportCsv() {
+    const all = readStore();
+    if (!all.length) { toast('No responses to export', 'err'); return; }
+    const headers = ['Timestamp','Name','Attending','Guest Of','Main Course','Dietary','Dietary Details'];
+    const esc = v => {
+      const s = String(v ?? '');
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const lines = [headers.join(',')];
+    all.forEach(r => lines.push(headers.map(h => esc(r[h])).join(',')));
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = `rsvp-${new Date().toISOString().slice(0,10)}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    toast('CSV downloaded', 'ok');
   }
 
   /* ── Toast ────────────────────────────────────────── */
