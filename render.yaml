@@ -1,0 +1,23 @@
+# Render Blueprint — describes the service so Render can spin it up
+# automatically when this repo is connected.
+#
+# After you log into Render, click "New +" → "Blueprint" → connect this
+# GitHub repo and Render reads this file. Then set DATABASE_URL and
+# ADMIN_TOKEN in the service's Environment tab (Render will prompt).
+
+services:
+  - type: web
+    name: wedding-invitation
+    runtime: node
+    plan: free                  # 512MB RAM, sleeps after 15min idle
+    buildCommand: npm install
+    startCommand: node server.js
+    autoDeploy: true            # redeploys on every push to main
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        sync: false             # set manually in Render dashboard
+      - key: ADMIN_TOKEN
+        sync: false             # set manually in Render dashboard
+      - key: NODE_VERSION
+        value: 20

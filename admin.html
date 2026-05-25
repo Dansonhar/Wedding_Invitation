@@ -532,16 +532,16 @@
   'use strict';
 
   /* ─────────────────────────────────────────────────────────
-     Local-storage backed admin — no external backend required.
-     Submissions land here immediately from the RSVP form.
+     Backend-backed admin. Talks to /api/rsvp on the same origin
+     (Render web service). When the API isn't reachable we fall
+     back to reading localStorage so testing locally still works.
 
-     NOTE: localStorage is scoped per browser, per device. The
-     admin shows entries that were submitted *on this browser*.
-     For cross-device collection you would need a real backend
-     (Firebase / Supabase / Apps Script).
+     The admin password doubles as the API bearer token, so the
+     server's ADMIN_TOKEN env var must match this value.
      ─────────────────────────────────────────────────────── */
-  const STORAGE_KEY    = 'rsvp_submissions';
-  const ADMIN_PASSWORD = 'danson2026';   // change anytime
+  const API_BASE       = '/api/rsvp';
+  const STORAGE_KEY    = 'rsvp_submissions';      // fallback only
+  const ADMIN_PASSWORD = 'danson2026';            // == ADMIN_TOKEN
 
   const q = sel => document.querySelector(sel);
 
@@ -604,21 +604,43 @@
     setTimeout(() => pwInput.focus(), 100);
   }
 
-  /* ── Load data from localStorage ───────────────────── */
+  /* ── Load data ─────────────────────────────────────── */
+  let usingApi = false;   // set to true when /api/rsvp is reachable
+
   function readStore() {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    } catch (_) {
-      return [];
-    }
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+    catch (_) { return []; }
   }
   function writeStore(arr) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
   }
 
-  function loadData() {
-    rows = readStore().slice().reverse();   // newest first
-    render();
+  async function loadData() {
+    tableHost.innerHTML = '<div class="loading"><div class="spinner"></div>Loading responses…</div>';
+    q('#stats').innerHTML = '';
+    q('#breakdowns').innerHTML = '';
+
+    // Try API first
+    try {
+      const res = await fetch(API_BASE, {
+        headers: { 'Authorization': 'Bearer ' + ADMIN_PASSWORD },
+        cache: 'no-store'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        rows = (data.rows || []).map(r => ({ ...r, _id: r.id }));
+        usingApi = true;
+        render();
+        return;
+      }
+      if (res.status === 401) throw new Error('Bad admin password (token mismatch with server)');
+      throw new Error('HTTP ' + res.status);
+    } catch (err) {
+      console.warn('API unavailable, falling back to localStorage:', err);
+      usingApi = false;
+      rows = readStore().slice().reverse();
+      render();
+    }
   }
 
   /* ── Filtering ─────────────────────────────────────── */
@@ -814,8 +836,36 @@
   }
   q('#editCancel').addEventListener('click', () => { editModal.hidden = true; });
   editModal.addEventListener('click', e => { if (e.target === editModal) editModal.hidden = true; });
-  q('#editSave').addEventListener('click', () => {
+  q('#editSave').addEventListener('click', async () => {
     if (!editingRow) return;
+
+    if (usingApi) {
+      // Send to server
+      const payload = {
+        name:            q('#editName').value.trim(),
+        attend:          q('#editAttend').value,
+        side:            q('#editSide').value,
+        main:            q('#editMain').value,
+        dietary:         q('#editDietary').value,
+        dietary_details: q('#editDietaryDetails').value.trim(),
+      };
+      try {
+        const res = await fetch(`${API_BASE}/${editingRow}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ADMIN_PASSWORD },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        editModal.hidden = true;
+        toast('Saved', 'ok');
+        loadData();
+      } catch (err) {
+        toast('Save failed: ' + err.message, 'err');
+      }
+      return;
+    }
+
+    // localStorage fallback
     const all = readStore();
     const idx = all.findIndex(r => r._id === editingRow);
     if (idx === -1) { toast('Row not found', 'err'); return; }
@@ -844,8 +894,26 @@
   }
   q('#deleteCancel').addEventListener('click', () => { deleteConfirm.hidden = true; });
   deleteConfirm.addEventListener('click', e => { if (e.target === deleteConfirm) deleteConfirm.hidden = true; });
-  q('#deleteOk').addEventListener('click', () => {
+  q('#deleteOk').addEventListener('click', async () => {
     if (!deletingRow) return;
+
+    if (usingApi) {
+      try {
+        const res = await fetch(`${API_BASE}/${deletingRow}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + ADMIN_PASSWORD }
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        deleteConfirm.hidden = true;
+        toast('Row deleted', 'ok');
+        loadData();
+      } catch (err) {
+        toast('Delete failed: ' + err.message, 'err');
+      }
+      return;
+    }
+
+    // localStorage fallback
     const all = readStore().filter(r => r._id !== deletingRow);
     writeStore(all);
     deleteConfirm.hidden = true;
